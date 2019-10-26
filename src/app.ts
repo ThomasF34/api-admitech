@@ -4,7 +4,7 @@ import connectDatadog from 'connect-datadog';
 
 const dd_options = {
   'response_code': true,
-  'tags': ['app:APP_NAME']
+  'tags': ['app:api-admitech']
 };
 
 const app = express();
@@ -22,7 +22,7 @@ const logger = createLogger({
     format.splat(),
     format.json()
   ),
-  defaultMeta: { service: 'APP_NAME' },
+  defaultMeta: { service: 'api-admitech' },
   transports: [
     new transports.File({ filename: 'logs/test.log' })
   ]
@@ -45,7 +45,7 @@ app.use(connectDatadog(dd_options));
 
 app.get('/', (req, res) => {
   logger.info('A request had been received on /');
-  res.send('Hello World in test mode!');
+  res.send('Hello World !');
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
