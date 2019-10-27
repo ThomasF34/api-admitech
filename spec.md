@@ -1,4 +1,4 @@
-# Ensemble des routes accessiblent pour la plateforme de recrutement
+# Ensemble des routes accessibles pour la plateforme de recrutement
 
 
 ### Candidatures
@@ -20,10 +20,10 @@
 
 ### QCM
 
-| VERB | ROUTE            | PARAMETERS                 | DESCRIPTIONS                                                          | DISPONIBLE POUR |
-| ---- | ---------------- | -------------------------- | --------------------------------------------------------------------- | --------------- |
-| GET  | /qcms            | filiere: IG or DO          | Renvoie l'ensemble des qcms respectant les critères donnés            | Administration  |
-| POST | /qcm/{id}/assign | id: id d'un qcm, TODO BODY | Assigne l'ensemble des candidats donnés à  au qcm représenté par `id` | Administration  |
+| VERB | ROUTE            | PARAMETERS                 | DESCRIPTIONS                                                         | DISPONIBLE POUR |
+| ---- | ---------------- | -------------------------- | -------------------------------------------------------------------- | --------------- |
+| GET  | /qcms            | filiere: IG or DO          | Renvoie l'ensemble des qcms respectant les critères donnés           | Administration  |
+| POST | /qcm/{id}/assign | id: id d'un qcm, TODO BODY | Assigne l'ensemble des candidats donnés à au qcm représenté par `id` | Administration  |
 
 ### Evenement
 
@@ -37,3 +37,30 @@
 | POST   | /evenement/{id}/desister   | id: id de l'évenement            | Annule la participation à l'évènement donné                                                                         | Entreprise, Administration |
 
 
+### Entreprise
+
+| VERB | ROUTE                  | PARAMETERS                        | DESCRIPTIONS                                        | DISPONIBLE POUR                   |
+| ---- | ---------------------- | --------------------------------- | --------------------------------------------------- | --------------------------------- |
+| GET  | /entreprise            |                                   | Renvoie l'ensemble des entreprises                  | Administration,Eleve              |
+| GET  | /entreprise/{id}       | id: id de l'entreprise            | obtention de l'entreprise                           | Administration,Entreprise, Eleve  |
+| PUT  | /entreprise/{id}       | id: id de l'entreprise, TODO BODY | Mise à jour de l'entreprise                         | Administration, Entreprise        |
+| GET  | /entreprise/{id}/offre | id: id de l'entreprise            | Obtention de l'ensemble des offres d'une entreprise | Entreprise, Administration, Eleve |
+| POST | /entreprise/{id}/offre | id: id de l'entreprise            | Ajoute une offre pour l'entreprise donnée           | Entreprise, Administration        |
+
+### Offre
+
+| VERB   | ROUTE       | PARAMETERS        | DESCRIPTIONS                  | DISPONIBLE POUR                 |
+| ------ | ----------- | ----------------- | ----------------------------- | ------------------------------- |
+| GET    | /offre      |                   | Renvoie l'ensemble des offres | Administration,Eleve            |
+| GET    | /offre/{id} | id: id de l'offre | obtention de l'offre          | Administration,Entreprise,Eleve |
+| DELETE | /offre/{id} | id: id de l'offre | Suppression de l'offre        | Administration,Entreprise       |
+| PUT    | /offre/{id} | id: id de l'offre | Mise à jour de l'offre        | Administration,Entreprise       |
+
+### Task list
+
+- [x] Candidature
+- [x] QCM
+- [x] Evenement
+- [x] Entreprise
+- [x] Offre
+- [ ] Utilisateur
