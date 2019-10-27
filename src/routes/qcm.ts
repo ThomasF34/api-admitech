@@ -1,9 +1,10 @@
-import { Request, Response, Router } from "express";
+import { Request, Response, Router } from 'express';
 const qcmRouter = Router();
 
 qcmRouter.get('/', (req: Request, res: Response) => {
-  res.status(200)
-  res.send('get all qcm');
+  res
+    .status(200)
+    .send('get all qcm');
 });
 
-export = qcmRouter
+export = qcmRouter;
