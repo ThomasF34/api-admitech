@@ -9,7 +9,7 @@ addons:
 stages:
 - tests
 - name: deploy
-  if: branch =~ /^(master|dev)$/
+  if: branch =~ /^(master|dev)$/ AND type != pull_request
 jobs:
   include:
   - stage: tests
