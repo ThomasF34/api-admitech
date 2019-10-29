@@ -1,6 +1,11 @@
 import express from 'express';
 import { createLogger, format, transports } from 'winston';
 import connectDatadog from 'connect-datadog';
+import cors from 'cors';
+import helmet from 'helmet';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const dd_options = {
   'response_code': true,
@@ -9,6 +14,12 @@ const dd_options = {
 
 const app = express();
 const port = 3000;
+
+app.use(cors());
+app.options('*', cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet());
 
 
 // Logger creation
