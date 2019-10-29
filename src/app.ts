@@ -1,6 +1,11 @@
 import express from 'express';
 import { createLogger, format, transports } from 'winston';
 import connectDatadog from 'connect-datadog';
+import cors from 'cors';
+import helmet from 'helmet'
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const dd_options = {
   'response_code': true,
@@ -9,7 +14,11 @@ const dd_options = {
 
 const app = express();
 const port = 3000;
-
+app.use(cors());
+app.options("*", cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet());
 
 // Logger creation
 const logger = createLogger({
@@ -45,7 +54,7 @@ app.use(connectDatadog(dd_options));
 
 app.get('/', (req, res) => {
   logger.info('A request had been received on /');
-  res.send('Hello World !');
+  res.send('Welcome to API of Admitech');
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`AdmitechAPI app listening on port ${port}!`));
