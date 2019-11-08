@@ -1,6 +1,5 @@
-import db from '../config/database';
+import db from '../database/config/database';
 import { Model, DataTypes } from 'sequelize';
-
 class Candidature extends Model {
   private id!: number;
   public fname!: string;
@@ -11,26 +10,22 @@ class Candidature extends Model {
   public phone!: string;
 }
 
-Candidature.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    fname: DataTypes.STRING,
-    lname: DataTypes.STRING,
-    familySituation: DataTypes.STRING,
-    birthdate: DataTypes.DATE,
-    email: DataTypes.STRING,
-    phone: DataTypes.STRING,
+Candidature.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
   },
-  {
-    tableName: 'Candidature',
-    timestamps: true,
-    freezeTableName: true,
-    sequelize: db
-  }
-);
+  fname: DataTypes.STRING,
+  lname: DataTypes.STRING,
+  familySituation: DataTypes.STRING,
+  birthdate: DataTypes.DATE,
+  email: DataTypes.STRING,
+  phone: DataTypes.STRING
+}, {
+  timestamps: true,
+  freezeTableName: true,
+  sequelize: db
+});
 
-export = Candidature;
+export = Candidature

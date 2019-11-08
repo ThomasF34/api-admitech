@@ -4,4 +4,9 @@ function getAll(): Promise<Candidature[]> {
   return Candidature.findAll();
 }
 
-export = { getAll }
+
+function getById(id: number): Promise<Candidature> {
+  return Candidature.findByPk(id);
+}
+
+export = { getAll, getById }
