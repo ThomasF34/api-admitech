@@ -4,7 +4,7 @@ import connectDatadog from 'connect-datadog';
 
 const dd_options = {
   'response_code': true,
-  'tags': ['app:api-admitech']
+  'tags': [`app:api-admitech-${process.env.NODE_ENV}`]
 };
 
 const app = express();
@@ -22,7 +22,7 @@ const logger = createLogger({
     format.splat(),
     format.json()
   ),
-  defaultMeta: { service: 'api-admitech' },
+  defaultMeta: { service: `api-admitech-${process.env.NODE_ENV}` },
   transports: [
     new transports.File({ filename: 'logs/test.log' })
   ]
@@ -37,8 +37,6 @@ if (process.env.NODE_ENV !== 'production') {
       format.simple()
     )
   }));
-} else {
-  new transports.File({ filename: 'logs/test.log' });
 }
 
 app.use(connectDatadog(dd_options));
