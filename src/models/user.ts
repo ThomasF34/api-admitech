@@ -2,7 +2,7 @@ import db from '../database/config/database';
 import { Model, DataTypes } from 'sequelize';
 
 class User extends Model {
-  private idUser!: number;
+  private id!: number;
   public email!: string;
   public fname!: string;
   public lname!: string;
@@ -11,7 +11,7 @@ class User extends Model {
 }
 
 User.init({
-  idUser: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
@@ -22,9 +22,8 @@ User.init({
   lname: DataTypes.STRING,
   fname: DataTypes.STRING
 }, {
-  tableName: 'User',
-  timestamps: false,
-  freezeTableName: true,
+  underscored: true,
+  timestamps: true,
   sequelize: db
 });
 
