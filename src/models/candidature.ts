@@ -1,5 +1,7 @@
 import db from '../database/config/database';
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, HasManyGetAssociationsMixin } from 'sequelize';
+import PastYearExp from './pastyearexp';
+
 class Candidature extends Model {
   private id!: number;
   public phone!: string;
@@ -45,7 +47,9 @@ class Candidature extends Model {
   public certified!: boolean;
   public certified_at!: Date;
   public created_at!: Date;
-  public updated_at!: Date
+  public updated_at!: Date;
+
+  public getExperiences!: HasManyGetAssociationsMixin<PastYearExp>;
 }
 
 Candidature.init({
@@ -96,12 +100,14 @@ Candidature.init({
   branch: DataTypes.STRING,
   certified: DataTypes.BOOLEAN,
   certified_at: DataTypes.DATE,
-  createdAt: DataTypes.DATE,
-  updatedAt: DataTypes.DATE
+  created_at: DataTypes.DATE,
+  updated_at: DataTypes.DATE
 }, {
+  underscored: true,
   timestamps: true,
-  freezeTableName: true,
   sequelize: db
 });
+
+Candidature.hasMany(PastYearExp, { as: 'experiences' });
 
 export = Candidature

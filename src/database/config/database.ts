@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import logger from '../../helpers/logger';
 const dbConfig = require('./config');
 
 
@@ -7,4 +8,4 @@ let config;
 if (env === 'production') config = dbConfig.production;
 else config = dbConfig.staging;
 
-export = new Sequelize.Sequelize(config.url, {});
+export = new Sequelize.Sequelize(config.url, { logging: msg => logger.info(`Call to DB : ${msg}`) });

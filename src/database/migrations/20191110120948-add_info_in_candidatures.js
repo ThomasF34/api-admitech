@@ -4,244 +4,244 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
       // Personnel
-      queryInterface.addColumn('Candidature', 'first_name', {
+      queryInterface.addColumn('candidatures', 'first_name', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'last_name', {
+      queryInterface.addColumn('candidatures', 'last_name', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'nationnality', {
+      queryInterface.addColumn('candidatures', 'nationnality', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'birth_date', {
+      queryInterface.addColumn('candidatures', 'birth_date', {
         type: Sequelize.DATEONLY
       }),
-      queryInterface.addColumn('Candidature', 'birth_place', {
+      queryInterface.addColumn('candidatures', 'birth_place', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'family_status', {
+      queryInterface.addColumn('candidatures', 'family_status', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'address', {
+      queryInterface.addColumn('candidatures', 'address', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'postal_code', {
+      queryInterface.addColumn('candidatures', 'postal_code', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'city', {
+      queryInterface.addColumn('candidatures', 'city', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'state', {
+      queryInterface.addColumn('candidatures', 'state', {
         type: Sequelize.STRING
       }),
 
       // Scolaire
-      queryInterface.addColumn('Candidature', 'bac_name', {
+      queryInterface.addColumn('candidatures', 'bac_name', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'bac_year', {
+      queryInterface.addColumn('candidatures', 'bac_year', {
         type: Sequelize.INTEGER
       }),
-      queryInterface.addColumn('Candidature', 'bac_mention', {
+      queryInterface.addColumn('candidatures', 'bac_mention', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'bac_realname', {
+      queryInterface.addColumn('candidatures', 'bac_realname', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'last_facility_name', {
+      queryInterface.addColumn('candidatures', 'last_facility_name', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'last_facility_address', {
+      queryInterface.addColumn('candidatures', 'last_facility_address', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'last_facility_postal_code', {
+      queryInterface.addColumn('candidatures', 'last_facility_postal_code', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'last_facility_city', {
+      queryInterface.addColumn('candidatures', 'last_facility_city', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'last_facility_state', {
+      queryInterface.addColumn('candidatures', 'last_facility_state', {
         type: Sequelize.STRING
       }),
 
       // Langues
-      queryInterface.addColumn('Candidature', 'native_lang_name', {
+      queryInterface.addColumn('candidatures', 'native_lang_name', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'first_lang_name', {
+      queryInterface.addColumn('candidatures', 'first_lang_name', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'second_lang_name', {
+      queryInterface.addColumn('candidatures', 'second_lang_name', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'third_lang_name', {
+      queryInterface.addColumn('candidatures', 'third_lang_name', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'first_lang_level', {
+      queryInterface.addColumn('candidatures', 'first_lang_level', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'second_lang_level', {
+      queryInterface.addColumn('candidatures', 'second_lang_level', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'third_lang_level', {
+      queryInterface.addColumn('candidatures', 'third_lang_level', {
         type: Sequelize.STRING
       }),
 
       // Experiences
-      queryInterface.addColumn('Candidature', 'internships', {
+      queryInterface.addColumn('candidatures', 'internships', {
         type: Sequelize.TEXT
       }),
-      queryInterface.addColumn('Candidature', 'travels', {
+      queryInterface.addColumn('candidatures', 'travels', {
         type: Sequelize.TEXT
       }),
-      queryInterface.addColumn('Candidature', 'it_knowledge', {
+      queryInterface.addColumn('candidatures', 'it_knowledge', {
         type: Sequelize.TEXT
       }),
-      queryInterface.addColumn('Candidature', 'sports_interests', {
+      queryInterface.addColumn('candidatures', 'sports_interests', {
         type: Sequelize.TEXT
       }),
-      queryInterface.addColumn('Candidature', 'strengths', {
+      queryInterface.addColumn('candidatures', 'strengths', {
         type: Sequelize.TEXT
       }),
 
-      // Autre candidature
-      queryInterface.addColumn('Candidature', 'other_apply', {
+      // Autre candidatures
+      queryInterface.addColumn('candidatures', 'other_apply', {
         type: Sequelize.BOOLEAN
       }),
-      queryInterface.addColumn('Candidature', 'other_apply_name', {
+      queryInterface.addColumn('candidatures', 'other_apply_name', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'other_apply_place', {
+      queryInterface.addColumn('candidatures', 'other_apply_place', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'other_apply_apprentise', {
+      queryInterface.addColumn('candidatures', 'other_apply_apprentise', {
         type: Sequelize.BOOLEAN
       }),
 
       // Other
-      queryInterface.addColumn('Candidature', 'candidate_comment', {
+      queryInterface.addColumn('candidatures', 'candidate_comment', {
         type: Sequelize.TEXT
       }),
-      queryInterface.addColumn('Candidature', 'admin_comment', {
+      queryInterface.addColumn('candidatures', 'admin_comment', {
         type: Sequelize.TEXT
       }),
-      queryInterface.addColumn('Candidature', 'status', {
+      queryInterface.addColumn('candidatures', 'status', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'branch', {
+      queryInterface.addColumn('candidatures', 'branch', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'certified', {
+      queryInterface.addColumn('candidatures', 'certified', {
         type: Sequelize.BOOLEAN
       }),
-      queryInterface.addColumn('Candidature', 'certified_at', {
+      queryInterface.addColumn('candidatures', 'certified_at', {
         type: Sequelize.DATE
       }),
 
       // Contrainte d'intégrité
-      queryInterface.addConstraint('Candidature', ['family_status'], {
+      queryInterface.addConstraint('candidatures', ['family_status'], {
         type: 'check',
         where: {
           family_status: ['married', 'single', 'other']
         }
       }),
-      queryInterface.addConstraint('Candidature', ['first_lang_level'], {
+      queryInterface.addConstraint('candidatures', ['first_lang_level'], {
         type: 'check',
         where: {
           first_lang_level: ['great', 'medium', 'basic']
         }
       }),
-      queryInterface.addConstraint('Candidature', ['second_lang_level'], {
+      queryInterface.addConstraint('candidatures', ['second_lang_level'], {
         type: 'check',
         where: {
           second_lang_level: ['great', 'medium', 'basic']
         }
       }),
-      queryInterface.addConstraint('Candidature', ['third_lang_level'], {
+      queryInterface.addConstraint('candidatures', ['third_lang_level'], {
         type: 'check',
         where: {
           third_lang_level: ['great', 'medium', 'basic']
         }
       }),
-      queryInterface.addConstraint('Candidature', ['branch'], {
+      queryInterface.addConstraint('candidatures', ['branch'], {
         type: 'check',
         where: {
           branch: ['do', 'se']
         }
       }),
       /* MUST BE DISCUSSED BEFORE IMPLEMENTED (TODO)
-      queryInterface.addConstraint('Candidature', ['status'], {
+      queryInterface.addConstraint('candidatures', ['status'], {
         type: 'check',
         where: {
           status: ['']
         }
       }),*/
 
-      queryInterface.removeColumn('Candidature', 'fname'),
-      queryInterface.removeColumn('Candidature', 'lname'),
-      queryInterface.removeColumn('Candidature', 'familySituation'),
-      queryInterface.removeColumn('Candidature', 'birthdate'),
-      queryInterface.removeColumn('Candidature', 'email')
+      queryInterface.removeColumn('candidatures', 'fname'),
+      queryInterface.removeColumn('candidatures', 'lname'),
+      queryInterface.removeColumn('candidatures', 'familySituation'),
+      queryInterface.removeColumn('candidatures', 'birthdate'),
+      queryInterface.removeColumn('candidatures', 'email')
     ]);
   },
 
   down: (queryInterface, Sequelize) => {
     return Promise.all([
-      queryInterface.removeColumn('Candidature', 'first_name'),
-      queryInterface.removeColumn('Candidature', 'last_name'),
-      queryInterface.removeColumn('Candidature', 'nationnality'),
-      queryInterface.removeColumn('Candidature', 'birth_date'),
-      queryInterface.removeColumn('Candidature', 'birth_place'),
-      queryInterface.removeColumn('Candidature', 'family_status'),
-      queryInterface.removeColumn('Candidature', 'address'),
-      queryInterface.removeColumn('Candidature', 'postal_code'),
-      queryInterface.removeColumn('Candidature', 'city'),
-      queryInterface.removeColumn('Candidature', 'state'),
-      queryInterface.removeColumn('Candidature', 'bac_name'),
-      queryInterface.removeColumn('Candidature', 'bac_year'),
-      queryInterface.removeColumn('Candidature', 'bac_mention'),
-      queryInterface.removeColumn('Candidature', 'bac_realname'),
-      queryInterface.removeColumn('Candidature', 'last_facility_name'),
-      queryInterface.removeColumn('Candidature', 'last_facility_address'),
-      queryInterface.removeColumn('Candidature', 'last_facility_postal_code'),
-      queryInterface.removeColumn('Candidature', 'last_facility_city'),
-      queryInterface.removeColumn('Candidature', 'last_facility_state'),
-      queryInterface.removeColumn('Candidature', 'native_lang_name'),
-      queryInterface.removeColumn('Candidature', 'first_lang_name'),
-      queryInterface.removeColumn('Candidature', 'second_lang_name'),
-      queryInterface.removeColumn('Candidature', 'third_lang_name'),
-      queryInterface.removeColumn('Candidature', 'first_lang_level'),
-      queryInterface.removeColumn('Candidature', 'second_lang_level'),
-      queryInterface.removeColumn('Candidature', 'third_lang_level'),
-      queryInterface.removeColumn('Candidature', 'internships'),
-      queryInterface.removeColumn('Candidature', 'travels'),
-      queryInterface.removeColumn('Candidature', 'it_knowledge'),
-      queryInterface.removeColumn('Candidature', 'sports_interests'),
-      queryInterface.removeColumn('Candidature', 'strengths'),
-      queryInterface.removeColumn('Candidature', 'other_apply'),
-      queryInterface.removeColumn('Candidature', 'other_apply_name'),
-      queryInterface.removeColumn('Candidature', 'other_apply_place'),
-      queryInterface.removeColumn('Candidature', 'other_apply_apprentise'),
-      queryInterface.removeColumn('Candidature', 'candidate_comment'),
-      queryInterface.removeColumn('Candidature', 'admin_comment'),
-      queryInterface.removeColumn('Candidature', 'status'),
-      queryInterface.removeColumn('Candidature', 'branch'),
-      queryInterface.removeColumn('Candidature', 'certified'),
-      queryInterface.removeColumn('Candidature', 'certified_at'),
+      queryInterface.removeColumn('candidatures', 'first_name'),
+      queryInterface.removeColumn('candidatures', 'last_name'),
+      queryInterface.removeColumn('candidatures', 'nationnality'),
+      queryInterface.removeColumn('candidatures', 'birth_date'),
+      queryInterface.removeColumn('candidatures', 'birth_place'),
+      queryInterface.removeColumn('candidatures', 'family_status'),
+      queryInterface.removeColumn('candidatures', 'address'),
+      queryInterface.removeColumn('candidatures', 'postal_code'),
+      queryInterface.removeColumn('candidatures', 'city'),
+      queryInterface.removeColumn('candidatures', 'state'),
+      queryInterface.removeColumn('candidatures', 'bac_name'),
+      queryInterface.removeColumn('candidatures', 'bac_year'),
+      queryInterface.removeColumn('candidatures', 'bac_mention'),
+      queryInterface.removeColumn('candidatures', 'bac_realname'),
+      queryInterface.removeColumn('candidatures', 'last_facility_name'),
+      queryInterface.removeColumn('candidatures', 'last_facility_address'),
+      queryInterface.removeColumn('candidatures', 'last_facility_postal_code'),
+      queryInterface.removeColumn('candidatures', 'last_facility_city'),
+      queryInterface.removeColumn('candidatures', 'last_facility_state'),
+      queryInterface.removeColumn('candidatures', 'native_lang_name'),
+      queryInterface.removeColumn('candidatures', 'first_lang_name'),
+      queryInterface.removeColumn('candidatures', 'second_lang_name'),
+      queryInterface.removeColumn('candidatures', 'third_lang_name'),
+      queryInterface.removeColumn('candidatures', 'first_lang_level'),
+      queryInterface.removeColumn('candidatures', 'second_lang_level'),
+      queryInterface.removeColumn('candidatures', 'third_lang_level'),
+      queryInterface.removeColumn('candidatures', 'internships'),
+      queryInterface.removeColumn('candidatures', 'travels'),
+      queryInterface.removeColumn('candidatures', 'it_knowledge'),
+      queryInterface.removeColumn('candidatures', 'sports_interests'),
+      queryInterface.removeColumn('candidatures', 'strengths'),
+      queryInterface.removeColumn('candidatures', 'other_apply'),
+      queryInterface.removeColumn('candidatures', 'other_apply_name'),
+      queryInterface.removeColumn('candidatures', 'other_apply_place'),
+      queryInterface.removeColumn('candidatures', 'other_apply_apprentise'),
+      queryInterface.removeColumn('candidatures', 'candidate_comment'),
+      queryInterface.removeColumn('candidatures', 'admin_comment'),
+      queryInterface.removeColumn('candidatures', 'status'),
+      queryInterface.removeColumn('candidatures', 'branch'),
+      queryInterface.removeColumn('candidatures', 'certified'),
+      queryInterface.removeColumn('candidatures', 'certified_at'),
 
-      queryInterface.addColumn('Candidature', 'fname', {
+      queryInterface.addColumn('candidatures', 'fname', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'lname', {
+      queryInterface.addColumn('candidatures', 'lname', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'familySituation', {
+      queryInterface.addColumn('candidatures', 'familySituation', {
         type: Sequelize.STRING
       }),
-      queryInterface.addColumn('Candidature', 'birthdate', {
+      queryInterface.addColumn('candidatures', 'birthdate', {
         type: Sequelize.DATE
       }),
-      queryInterface.addColumn('Candidature', 'email', {
+      queryInterface.addColumn('candidatures', 'email', {
         type: Sequelize.STRING
       })
     ]);
