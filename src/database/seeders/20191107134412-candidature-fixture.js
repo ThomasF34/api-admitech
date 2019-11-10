@@ -54,7 +54,7 @@ module.exports = {
 
     const candidatureRow = candidatures[0];
 
-    return await queryInterface.bulkInsert('past_year_exps', [
+    await queryInterface.bulkInsert('past_year_exps', [
       {
         year: '2019',
         name: 'une formation',
@@ -64,6 +64,16 @@ module.exports = {
         mean: 10,
         rating: '4',
         ranking: '4/200',
+        candidature_id: candidatureRow[0].id,
+        created_at: new Date(),
+        updated_at: new Date()
+      }
+    ], {});
+
+    await queryInterface.bulkInsert('attachments', [
+      {
+        attach_type: 'cover_letter',
+        url: 'www.google.fr',
         candidature_id: candidatureRow[0].id,
         created_at: new Date(),
         updated_at: new Date()
