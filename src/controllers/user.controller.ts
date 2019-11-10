@@ -23,5 +23,4 @@ async function addUser(user: User): Promise<User | undefined> {
   }
 }
 
-
 export = { getUserByEmail, addUser };

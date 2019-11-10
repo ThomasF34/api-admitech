@@ -62,4 +62,6 @@ authRouter.post('/inscrire', async (req: Request, res: Response) => {
 });
 
 
+//TODO VerifyToken
+
 export = authRouter;
