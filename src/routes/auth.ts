@@ -10,7 +10,6 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
   res.type('application/json');
 
   const { email, password } = req.body;
-
   try {
     if (!(email && password)) {
       res.sendStatus(400);
@@ -18,6 +17,7 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
     let user: UserAuth | null;
 
     user = await userController.getUserByEmail(email);
+
     if (user != null) {
       //Check if encrypted password match
       if (!checkIfUnencryptedPasswordIsValid(password, user.password)) {
@@ -32,6 +32,8 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
         res.status(200);
         res.send(token);
       }
+    } else {
+      res.sendStatus(404);
     }
   } catch (error) {
     res.sendStatus(401);
