@@ -23,3 +23,27 @@ config:set test-api-admitech DD_API_KEY=<datadog api key>
 proxy:ports-add api-admitech http:80:3000
 proxy:ports-add test-api-admitech http:80:3000
 ```
+
+# Routes
+
+Chaque route peut renvoyer un code 500 en cas d'erreur du côté du serveur
+
+* GET - `/candidature` - Renvoie l'ensemble des candidatures
+  * 200 - Quelques attributs pour toutes les candidatures : Status du dossier - Nom - Prénom - Spécialité
+  * 204 - Pas de candidature à afficher
+  * 401 - L'utilisateur doit être connecté
+  * 403 - L'utilisateur connecté ne peut accéder à la ressource
+
+* GET - `/candidature/:id` - Renvoie toutes les informations d'une candidature en prenant en compte le rôle de l'utilisateur connecté
+  * 200 - Toutes les infos de la candidature
+  * 401 - L'utilisateur ne peut accéder à la page sans être connecté
+  * 403 - L'utilisateur connecté ne peut accéder à la ressource
+  * 404 - La candidature demandée n'a pas été trouvée
+
+* POST - `/candidature` - Créer une nouvelle candidature. Si le status envoyé est `draft` alors aucune vérification sur les champs `null` n'est effectuée. Sinon des vérifications sont faites et une erreur 400 peut être envoyée.
+  * 201 - Candidature créée
+  * 400 - Un ou des élèments ne vont pas dans la candidature. Dans la réponse se trouve un champ `errors` contenant un tableau de `string` décrivant les erreurs
+  * 401 - L'utilisateur doit être connecté pour réaliser l'action
+  * 403 - L'utilisateur connecté ne peut accéder à la ressource
+
+

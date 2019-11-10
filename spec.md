@@ -25,7 +25,7 @@
 | GET  | /qcms            | filiere: IG or DO          | Renvoie l'ensemble des qcms respectant les critères donnés           | Administration  |
 | POST | /qcm/{id}/assign | id: id d'un qcm, TODO BODY | Assigne l'ensemble des candidats donnés à au qcm représenté par `id` | Administration  |
 
-### Evenement
+### Evénement
 
 | VERB   | ROUTE                      | PARAMETERS                       | DESCRIPTIONS                                                                                                        | DISPONIBLE POUR            |
 | ------ | -------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------- |
