@@ -1,6 +1,7 @@
 import db from '../database/config/database';
 import { Model, DataTypes, HasManyGetAssociationsMixin } from 'sequelize';
 import PastYearExp from './pastyearexp';
+import Attachment from './attachment';
 
 class Candidature extends Model {
   private id!: number;
@@ -109,5 +110,6 @@ Candidature.init({
 });
 
 Candidature.hasMany(PastYearExp, { as: 'experiences' });
+Candidature.hasMany(Attachment, { as: 'attachments' });
 
 export = Candidature
