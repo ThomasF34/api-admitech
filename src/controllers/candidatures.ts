@@ -1,7 +1,15 @@
 import Candidature from '../models/candidature';
+import PastYearExp from '../models/pastyearexp';
 
-function getAll(): Promise<Candidature[]> {
-  return Candidature.findAll();
+async function getAll(): Promise<Candidature[]> {
+  const candidatures = Candidature.findAll({
+    include: [
+      {
+        model: PastYearExp,
+        as: 'experiences',
+      }]
+  });
+  return candidatures;
 }
 
 

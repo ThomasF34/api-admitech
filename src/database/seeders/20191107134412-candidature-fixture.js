@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Candidature', [{
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.bulkInsert('candidatures', [{
       first_name: 'Thomas',
       last_name: 'Falcone',
       nationnality: 'Français',
@@ -44,14 +44,39 @@ module.exports = {
       branch: 'do',
       certified: true,
       certified_at: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date()
+      created_at: new Date(),
+      updated_at: new Date()
     }], {});
+
+    const candidatures = await queryInterface.sequelize.query(
+      'SELECT id from candidatures;'
+    );
+
+    const candidatureRow = candidatures[0];
+
+    return await queryInterface.bulkInsert('past_year_exps', [
+      {
+        year: '2019',
+        name: 'une formation',
+        facility_name: 'une ecole',
+        facility_place: 'a montpellier',
+        degree: false,
+        mean: 10,
+        rating: '4',
+        ranking: '4/200',
+        candidature_id: candidatureRow[0].id,
+        created_at: new Date(),
+        updated_at: new Date()
+      }
+    ], {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Candidature', [{
-      first_name: 'Thomas',
-    }]);
+    Promise.all([
+      queryInterface.bulkDelete('candidatures', [{
+        first_name: 'Thomas',
+      }]),
+      queryInterface.bulkDelete('past_year_exps', null)
+    ]);
   }
 };

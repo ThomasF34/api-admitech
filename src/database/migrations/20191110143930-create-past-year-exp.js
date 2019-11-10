@@ -1,30 +1,43 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('candidatures', {
+    return queryInterface.createTable('past_year_exps', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      fname: {
+      year: {
         type: Sequelize.STRING
       },
-      lname: {
+      name: {
         type: Sequelize.STRING
       },
-      familySituation: {
+      facility_name: {
         type: Sequelize.STRING
       },
-      birthdate: {
-        type: Sequelize.DATE
-      },
-      email: {
+      facility_place: {
         type: Sequelize.STRING
       },
-      phone: {
+      degree: {
+        type: Sequelize.BOOLEAN
+      },
+      mean: {
+        type: Sequelize.DECIMAL
+      },
+      rating: {
         type: Sequelize.STRING
+      },
+      ranking: {
+        type: Sequelize.STRING
+      },
+      candidature_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'candidatures',
+          key: 'id',
+        }
       },
       created_at: {
         allowNull: false,
@@ -37,6 +50,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('candidatures');
+    return queryInterface.dropTable('past_year_exps');
   }
 };
