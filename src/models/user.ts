@@ -3,7 +3,7 @@ import { Model, DataTypes } from 'sequelize';
 import Candidature from './candidature';
 
 class User extends Model {
-  private id!: number;
+  public id!: number;
   public email!: string;
   public first_name!: string;
   public last_name!: string;

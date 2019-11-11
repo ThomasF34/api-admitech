@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import userController from '../controllers/user.controller';
 import User from '../models/user';
 import { checkIfUnencryptedPasswordIsValid } from '../helpers/password.helper';
+import logger from '../helpers/logger';
 const authRouter = Router();
 
 //Get a text from the API and send it
@@ -24,18 +25,20 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
         res.sendStatus(401);
       } else {
         //Sing JWT, valid for 1 hour
-        const token = jwt.sign({ role: user.role, email: user.email, first_name: user.first_name, last_name: user.last_name }, process.env.Secret_Key_JWT!, {
+        const token = jwt.sign({ id: user.id, role: user.role, email: user.email, first_name: user.first_name, last_name: user.last_name }, process.env.SECRET_KEY_JWT!, {
           expiresIn: '1h'
         });
 
         //Send the jwt in the response
-        res.status(200);
-        res.send(token);
+        res
+          .status(200)
+          .json({ token: token });
       }
     } else {
       res.sendStatus(404);
     }
   } catch (error) {
+    logger.info(error);
     res.sendStatus(401);
   }
 

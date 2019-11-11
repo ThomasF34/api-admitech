@@ -5,19 +5,29 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('users', [{
       id: 1,
-      first_name: 'Thomas',
-      last_name: 'Falcone',
-      email: 'monemail@email.com',
+      first_name: 'Alice',
+      last_name: 'Dupond',
+      email: 'email@eleve.fr',
       password: bcrypt.hashSync('abcd', 10),
       role: 'eleve',
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      id: 2,
+      first_name: 'Bob',
+      last_name: 'Dupond',
+      email: 'email@administration.fr',
+      password: bcrypt.hashSync('abcd', 10),
+      role: 'administration',
       created_at: new Date(),
       updated_at: new Date()
     }]);
 
     await queryInterface.bulkInsert('candidatures', [{
       user_id: 1,
-      first_name: 'Thomas',
-      last_name: 'Falcone',
+      first_name: 'Alice',
+      last_name: 'Dupond',
       nationnality: 'Français',
       birth_date: new Date(),
       birth_place: 'montpellier',
@@ -97,9 +107,11 @@ module.exports = {
   down: (queryInterface, Sequelize) => {
     Promise.all([
       queryInterface.bulkDelete('candidatures', [{
-        first_name: 'Thomas',
+        first_name: 'Alice',
       }]),
-      queryInterface.bulkDelete('past_year_exps', null)
+      queryInterface.bulkDelete('past_year_exps', null),
+      queryInterface.bulkDelete('attachments', null),
+      queryInterface.bulkDelete('users', [{ first_name: 'Alice' }, { first_name: 'Bob' }]),
     ]);
   }
 };

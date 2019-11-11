@@ -34,6 +34,13 @@ module.exports = {
       }
     });
 
+    await queryInterface.addConstraint('users', ['role'], {
+      type: 'check',
+      where: {
+        role: ['eleve', 'administration', 'referant']
+      }
+    });
+
     return queryInterface.addConstraint('users', ['email'], {
       type: 'unique'
     });
