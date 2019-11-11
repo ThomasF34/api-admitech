@@ -29,7 +29,7 @@ proxy:ports-add test-api-admitech http:80:3000
 Chaque route peut renvoyer un code 500 en cas d'erreur du côté du serveur
 
 * GET - `/candidature` - Renvoie l'ensemble des candidatures
-  * 200 - Quelques attributs pour toutes les candidatures : Status du dossier - Nom - Prénom - Spécialité
+  * 200 - Quelques attributs pour toutes les candidatures : `status`, `branch`, `first_name`, `last_name`
   * 204 - Pas de candidature à afficher
   * 401 - L'utilisateur doit être connecté
   * 403 - L'utilisateur connecté ne peut accéder à la ressource
@@ -46,4 +46,6 @@ Chaque route peut renvoyer un code 500 en cas d'erreur du côté du serveur
   * 401 - L'utilisateur doit être connecté pour réaliser l'action
   * 403 - L'utilisateur connecté ne peut accéder à la ressource
 
-
+* GET - `/profile` - Obtenir le profil de l'utilisateur connecté
+  * 200 - Info renvoyée : first_name, last_name, email, candidatures (seulement `status`, `branch` et `id`)
+  * 401 - L'utilisateur doit être connecté

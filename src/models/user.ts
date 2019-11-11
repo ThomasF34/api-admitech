@@ -1,11 +1,12 @@
 import db from '../database/config/database';
 import { Model, DataTypes } from 'sequelize';
+import Candidature from './candidature';
 
 class User extends Model {
   private id!: number;
   public email!: string;
-  public fname!: string;
-  public lname!: string;
+  public first_name!: string;
+  public last_name!: string;
   public password!: string;
   public role!: string;
 }
@@ -19,12 +20,14 @@ User.init({
   email: DataTypes.STRING,
   password: DataTypes.STRING,
   role: DataTypes.STRING,
-  lname: DataTypes.STRING,
-  fname: DataTypes.STRING
+  last_name: DataTypes.STRING,
+  first_name: DataTypes.STRING
 }, {
   underscored: true,
   timestamps: true,
   sequelize: db
 });
+
+User.hasMany(Candidature, { as: 'candidatures' });
 
 export = User;

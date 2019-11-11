@@ -3,6 +3,16 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
+      // Refers to a user 
+      queryInterface.addColumn('candidatures', 'user_id', {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id',
+        }
+      }),
+
       // Personnel
       queryInterface.addColumn('candidatures', 'first_name', {
         type: Sequelize.STRING

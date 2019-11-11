@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import userController from '../controllers/user.controller';
-import UserAuth from '../models/user';
+import User from '../models/user';
 import { checkIfUnencryptedPasswordIsValid } from '../helpers/password.helper';
 const authRouter = Router();
 
@@ -14,7 +14,7 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
     if (!(email && password)) {
       res.sendStatus(400);
     }
-    let user: UserAuth | null;
+    let user: User | null;
 
     user = await userController.getUserByEmail(email);
 
@@ -24,7 +24,7 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
         res.sendStatus(401);
       } else {
         //Sing JWT, valid for 1 hour
-        const token = jwt.sign({ role: user.role, email: user.email, fname: user.fname, lname: user.lname }, process.env.Secret_Key_JWT!, {
+        const token = jwt.sign({ role: user.role, email: user.email, first_name: user.first_name, last_name: user.last_name }, process.env.Secret_Key_JWT!, {
           expiresIn: '1h'
         });
 
@@ -45,10 +45,10 @@ authRouter.post('/inscrire', async (req: Request, res: Response) => {
   res.type('application/json');
   try {
 
-    const userToAdd = new UserAuth();
+    const userToAdd = new User();
     userToAdd.email = req.body.email;
-    userToAdd.lname = req.body.lname;
-    userToAdd.fname = req.body.fname;
+    userToAdd.last_name = req.body.last_name;
+    userToAdd.first_name = req.body.fir;
     userToAdd.password = req.body.password;
     userToAdd.role = req.body.role;
 

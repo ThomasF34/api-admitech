@@ -12,10 +12,10 @@ module.exports = {
       email: {
         type: Sequelize.STRING
       },
-      fname: {
+      first_name: {
         type: Sequelize.STRING
       },
-      lname: {
+      last_name: {
         type: Sequelize.STRING
       },
       password: {
