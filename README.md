@@ -58,3 +58,138 @@ Chaque route peut renvoyer un code 500 en cas d'erreur du côté du serveur
   * BODY - Doit contenir `email` et `password`
   * 200 - Utilisateur connecté. Contient `token`
   * 404 - Utilisateur non trouvé ou mot de passe incorrect. Pour des raisons de sécurité, c'est la même erreur qui est renvoyée dans les deux cas.
+
+
+### Candidature GET ou POST
+
+3 différents modèles définissant la candidature
+
+- Candidatures : https://github.com/ThomasF34/api-admitech/blob/feature/users-integration/src/models/candidature.ts
+- Attachment (Piece jointe des candidatures) : https://github.com/ThomasF34/api-admitech/blob/feature/users-integration/src/models/attachment.ts
+- Past experience : https://github.com/ThomasF34/api-admitech/blob/feature/users-integration/src/models/pastyearexp.ts
+
+POST et GET sous forme de JSON
+```
+{
+    "address": "somewhere",
+    "admin_comment": "eleve a rejeter",
+    "attachments": [
+        {
+            "attach_type": "cover_letter",
+            "url": "www.google.fr"
+        }
+    ],
+    "bac_mention": "bien",
+    "bac_name": "un bac",
+    "bac_realname": "un super bac",
+    "bac_year": 2009,
+    "birth_date": "2019-11-12",
+    "birth_place": "montpellier",
+    "branch": "do",
+    "candidate_comment": "je suis content ",
+    "certified": true,
+    "certified_at": "2019-11-12T09:20:10.057Z",
+    "city": "montpellier",
+    "experiences": [
+        {
+            "degree": false,
+            "facility_name": "une ecole",
+            "facility_place": "a montpellier",
+            "mean": "10",
+            "name": "une formation",
+            "ranking": "4/200",
+            "rating": "4",
+            "year": "2019"
+        }
+    ],
+    "family_status": "single",
+    "first_lang_level": "great",
+    "first_lang_name": "anglais",
+    "first_name": "Alice",
+    "internships": "Franchement j'ai fait des stages trop bien",
+    "it_knowledge": "bon là j'ai plus d'inspi par contre",
+    "last_facility_address": "somewhere",
+    "last_facility_city": "montpellier",
+    "last_facility_name": "un etablissement",
+    "last_facility_postal_code": "34000",
+    "last_facility_state": "france",
+    "last_name": "Dupond",
+    "nationnality": "Français",
+    "native_lang_name": "français",
+    "other_apply": false,
+    "other_apply_apprentise": null,
+    "other_apply_name": null,
+    "other_apply_place": null,
+    "phone": null,
+    "postal_code": "34000",
+    "second_lang_level": "great",
+    "second_lang_name": "italien",
+    "sports_interests": "du sport ? ",
+    "state": "france",
+    "status": "REFUSE",
+    "strengths": "mhhhh....",
+    "third_lang_level": null,
+    "third_lang_name": null,
+    "travels": "j'ai aussi voyagé",
+}
+```
+
+
+Contraintes sur les candidatures : 
+```
+queryInterface.addConstraint('candidatures', ['family_status'], {
+        type: 'check',
+        where: {
+          family_status: ['married', 'single', 'other']
+        }
+      }),
+      queryInterface.addConstraint('candidatures', ['first_lang_level'], {
+        type: 'check',
+        where: {
+          first_lang_level: ['great', 'medium', 'basic']
+        }
+      }),
+      queryInterface.addConstraint('candidatures', ['second_lang_level'], {
+        type: 'check',
+        where: {
+          second_lang_level: ['great', 'medium', 'basic']
+        }
+      }),
+      queryInterface.addConstraint('candidatures', ['third_lang_level'], {
+        type: 'check',
+        where: {
+          third_lang_level: ['great', 'medium', 'basic']
+        }
+      }),
+      queryInterface.addConstraint('candidatures', ['branch'], {
+        type: 'check',
+        where: {
+          branch: ['do', 'se']
+        }
+      }),
+```
+
+Contraintes des utilisateurs : 
+
+```
+await queryInterface.addConstraint('users', ['role'], {
+      type: 'check',
+      where: {
+        role: ['eleve', 'administration', 'referant', 'entreprise']
+      }
+    });
+
+    return queryInterface.addConstraint('users', ['email'], {
+      type: 'unique'
+    })
+```
+
+
+Contrainte sur les attachments : 
+```
+ return await queryInterface.addConstraint('attachments', ['attach_type'], {
+      type: 'check',
+      where: {
+        attach_type: ['cover_letter', 'cv', 'bac_marks', 'year_marks', 'degree', 'current_year_marks', 'notice_further_study']
+      }
+```
