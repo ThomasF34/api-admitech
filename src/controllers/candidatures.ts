@@ -3,22 +3,26 @@ import PastYearExp from '../models/pastyearexp';
 import Attachment from '../models/attachment';
 
 async function getAll(): Promise<Candidature[]> {
-  const candidatures = Candidature.findAll({
-    attributes: ['status', 'branch', 'first_name', 'last_name']
+  return Candidature.findAll({
+    attributes: ['status', 'branch', 'first_name', 'last_name'],
+    where: {
+      draft: false
+    }
   });
-  return candidatures;
 }
 
 
-function getById(id: number): Promise<Candidature> {
+function getById(id: number, role: string): Promise<Candidature> {
   return Candidature.findByPk(id, {
     include: [
       {
         model: PastYearExp,
         as: 'experiences',
+        attributes: ['degree', 'facility_name', 'facility_place', 'mean', 'name', 'ranking', 'rating', 'year']
       }, {
         model: Attachment,
-        as: 'attachments'
+        as: 'attachments',
+        attributes: ['attach_type', 'url']
       }]
   });
 }

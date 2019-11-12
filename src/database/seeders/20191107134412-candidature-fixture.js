@@ -22,10 +22,21 @@ module.exports = {
       role: 'administration',
       created_at: new Date(),
       updated_at: new Date()
-    }]);
+    }, {
+      id: 3,
+      first_name: 'Elisa',
+      last_name: 'Dupond',
+      email: 'email@entreprise.fr',
+      password: bcrypt.hashSync('abcd', 10),
+      role: 'entreprise',
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    ]);
 
     await queryInterface.bulkInsert('candidatures', [{
       user_id: 1,
+      draft: false,
       first_name: 'Alice',
       last_name: 'Dupond',
       nationnality: 'Français',
@@ -88,8 +99,6 @@ module.exports = {
         rating: '4',
         ranking: '4/200',
         candidature_id: candidatureRow[0].id,
-        created_at: new Date(),
-        updated_at: new Date()
       }
     ], {});
 
@@ -111,7 +120,7 @@ module.exports = {
       }]),
       queryInterface.bulkDelete('past_year_exps', null),
       queryInterface.bulkDelete('attachments', null),
-      queryInterface.bulkDelete('users', [{ first_name: 'Alice' }, { first_name: 'Bob' }]),
+      queryInterface.bulkDelete('users', [{ first_name: 'Alice' }, { first_name: 'Bob' }, { first_name: 'Elisa' }]),
     ]);
   }
 };

@@ -29,10 +29,13 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
           expiresIn: '1h'
         });
 
+        //logging
+        logger.info(`User ${user.id} got connected`);
+
         //Send the jwt in the response
         res
           .status(200)
-          .json({ token: token });
+          .send(token);
       }
     } else {
       res.sendStatus(404);
@@ -41,8 +44,8 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
     logger.info(error);
     res.sendStatus(401);
   }
-
 });
+
 //Insert in the DB
 authRouter.post('/inscrire', async (req: Request, res: Response) => {
   res.type('application/json');
@@ -57,9 +60,10 @@ authRouter.post('/inscrire', async (req: Request, res: Response) => {
 
     const user = await userController.addUser(userToAdd);
     if (user != undefined) {
+      logger.info(`User ${user.email} registered`);
       res.sendStatus(201);
     } else {
-      res.status(400).json('email déjà utilisé');
+      res.status(400).json('Email déjà utilisé');
     }
   } catch (e) {
     res.status(500).json(e.message);

@@ -1,5 +1,5 @@
 import db from '../database/config/database';
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, HasManyCreateAssociationMixin } from 'sequelize';
 import Candidature from './candidature';
 
 class User extends Model {
@@ -9,6 +9,9 @@ class User extends Model {
   public last_name!: string;
   public password!: string;
   public role!: string;
+
+  public createCandidature!: HasManyCreateAssociationMixin<Candidature>;
+
 }
 
 User.init({

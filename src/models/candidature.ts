@@ -1,11 +1,12 @@
 import db from '../database/config/database';
-import { Model, DataTypes, HasManyGetAssociationsMixin } from 'sequelize';
+import { Model, DataTypes, HasManyCreateAssociationMixin } from 'sequelize';
 import PastYearExp from './pastyearexp';
 import Attachment from './attachment';
 
 class Candidature extends Model {
   private id!: number;
   public phone!: string;
+  public draft!: boolean;
   public first_name!: string;
   public last_name!: string;
   public nationnality!: string;
@@ -50,7 +51,8 @@ class Candidature extends Model {
   public created_at!: Date;
   public updated_at!: Date;
 
-  public getExperiences!: HasManyGetAssociationsMixin<PastYearExp>;
+  public createAttachment!: HasManyCreateAssociationMixin<Attachment>;
+  public createExperience!: HasManyCreateAssociationMixin<PastYearExp>;
 }
 
 Candidature.init({
@@ -60,6 +62,7 @@ Candidature.init({
     autoIncrement: true
   },
   phone: DataTypes.STRING,
+  draft: DataTypes.BOOLEAN,
   first_name: DataTypes.STRING,
   last_name: DataTypes.STRING,
   nationnality: DataTypes.STRING,
@@ -101,8 +104,6 @@ Candidature.init({
   branch: DataTypes.STRING,
   certified: DataTypes.BOOLEAN,
   certified_at: DataTypes.DATE,
-  created_at: DataTypes.DATE,
-  updated_at: DataTypes.DATE
 }, {
   underscored: true,
   timestamps: true,

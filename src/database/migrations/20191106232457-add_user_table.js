@@ -37,7 +37,7 @@ module.exports = {
     await queryInterface.addConstraint('users', ['role'], {
       type: 'check',
       where: {
-        role: ['eleve', 'administration', 'referant']
+        role: ['eleve', 'administration', 'referant', 'entreprise']
       }
     });
 

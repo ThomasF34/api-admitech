@@ -23,16 +23,16 @@ const checkJwt = (req: Request, res: Response, next: NextFunction) => {
         expiresIn: '1h'
       });
       res.setHeader('token-admitech', newToken);
+      next();
     } else {
       res.status(401).json('User must be connected to make this request');
+      res.end();
     }
   } catch (error) {
-    logger.error(`Error while checking JWT - ${error}`);
+    logger.error(['Error while checking JWT', error]);
     res.sendStatus(500);
+    res.end();
   }
-
-  //Call the next middleware or controller
-  next();
 };
 
 export = checkJwt;

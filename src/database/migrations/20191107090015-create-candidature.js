@@ -8,6 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      draft: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+      },
       fname: {
         type: Sequelize.STRING
       },
