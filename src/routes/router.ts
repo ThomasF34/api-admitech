@@ -14,6 +14,6 @@ router.use('/qcm', qcmRouter);
 router.use('/entreprise', entrepriseRouter);
 router.use('/offre', offreRouter);
 router.use('/utilisateur', authRouter);
-router.use('/profile', profileRouter);
+router.use('/profil', profileRouter);
 
 export default router;

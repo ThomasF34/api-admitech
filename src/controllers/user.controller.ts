@@ -2,17 +2,24 @@ import User from '../models/user';
 import { hashPassword } from '../helpers/password.helper';
 import Candidature from '../models/candidature';
 
-function getOwnProfileWithApplications(): Promise<User> {
-  // 1 must became the id of the connected user TODO
-  return User.findByPk(1, {
-    attributes: ['first_name', 'last_name', 'email'],
-    include: [
-      {
-        model: Candidature,
-        as: 'candidatures',
-        attributes: ['id', 'branch', 'status']
-      }]
-  });
+function getOwnProfile(id: number, role: string) {
+  switch (role) {
+    case 'eleve':
+      return User.findByPk(id, {
+        attributes: ['first_name', 'last_name', 'email'],
+        include: [
+          {
+            model: Candidature,
+            as: 'candidatures',
+            attributes: ['id', 'branch', 'status']
+          }]
+      });
+    case 'administration':
+      return User.findByPk(id, { attributes: ['first_name', 'last_name', 'email'] });
+    default:
+      return 'Vous n\'avez pas de profile';
+  }
+
 }
 
 function getUserByEmail(emailToCheck: string): Promise<User> {
@@ -37,4 +44,4 @@ async function addUser(user: User): Promise<User | undefined> {
   }
 }
 
-export = { getUserByEmail, addUser, getOwnProfileWithApplications };
+export = { getUserByEmail, addUser, getOwnProfile };

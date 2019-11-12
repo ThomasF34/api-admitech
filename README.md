@@ -50,7 +50,7 @@ Chaque route peut renvoyer un code 500 en cas d'erreur du côté du serveur
 
 ## Utilisateurs
 
-- [ ] GET - `/profile` - Obtenir le profil de l'utilisateur connecté
+- [x] GET - `/profil` - Obtenir le profil de l'utilisateur connecté
   * 200 - Info renvoyée : first_name, last_name, email, candidatures (seulement `status`, `branch` et `id`)
   * 401 - L'utilisateur doit être connecté
 
