@@ -31,6 +31,7 @@ candidatureRouter.get('/', [checkJwt], async (req: Request, res: Response) => {
 
 candidatureRouter.get('/:id', [checkJwt], async (req: Request, res: Response) => {
   const role: string = res.locals.user.role;
+  const userId: number = res.locals.user.id;
   try {
     if (role !== 'administration' && role !== 'eleve') {
       res
@@ -39,7 +40,8 @@ candidatureRouter.get('/:id', [checkJwt], async (req: Request, res: Response) =>
     } else {
       const id: number = parseInt(req.params.id);
       const candidature: Candidature = await candidatureController.getById(id, role);
-      if (candidature === null) res.status(404).json(`Candidature ${id} not found`);
+      if (candidature === null) res.status(404).json(`La candidature ${id} n'a pas été trouvée`);
+      else if (candidature.UserId !== userId) res.status(403).json('Les élèves ne peuvent accéder qu\'à leurs propres candidatures');
       else res.status(200).json(candidature);
     }
   } catch (e) {

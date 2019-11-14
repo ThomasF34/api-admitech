@@ -51,6 +51,8 @@ class Candidature extends Model {
   public created_at!: Date;
   public updated_at!: Date;
 
+  public UserId!: number;
+
   public createAttachment!: HasManyCreateAssociationMixin<Attachment>;
   public createExperience!: HasManyCreateAssociationMixin<PastYearExp>;
 }

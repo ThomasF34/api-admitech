@@ -16,8 +16,10 @@ function getById(id: number, role: string): Promise<Candidature> {
   let options = {};
   switch (role) {
     case 'eleve':
-      //TODO Exlude private information
       options = {
+        attributes: {
+          exclude: ['admin_comment']
+        },
         include: [
           {
             model: PastYearExp,
