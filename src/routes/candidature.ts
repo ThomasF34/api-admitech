@@ -71,8 +71,8 @@ candidatureRouter.post('/', [checkJwt], async (req: Request, res: Response) => {
           //We need to create each attachment and experiences
           const promises: Promise<Attachment | PastYearExp>[] = [];
 
-          promises.push(attachments.map((attach: any) => cand.createAttachment(attach)));
-          promises.push(experiences.map((exp: any) => cand.createExperience(exp)));
+          if (attachments !== undefined) promises.push(attachments.map((attach: any) => cand.createAttachment(attach)));
+          if (experiences !== undefined) promises.push(experiences.map((exp: any) => cand.createExperience(exp)));
 
           await Promise.all(promises);
 
