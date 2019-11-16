@@ -36,7 +36,7 @@ module.exports = {
 
     await queryInterface.bulkInsert('candidatures', [{
       user_id: 1,
-      draft: false,
+      draft: true,
       first_name: 'Alice',
       last_name: 'Dupond',
       nationnality: 'Français',
