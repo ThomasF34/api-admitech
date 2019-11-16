@@ -200,3 +200,40 @@ Contrainte sur les attachments :
         attach_type: ['cover_letter', 'cv', 'bac_marks', 'year_marks', 'degree', 'current_year_marks', 'notice_further_study']
       }
 ```
+
+## Erreurs possibles lors de la creation des candidatures
+
+**Si un des champs suivant est manquant**
+```js
+['first_name', 'last_name', 'phone', 'first_name', 'last_name', 'nationnality', 'birth_date', 'birth_place', 'family_status', 'address', 'postal_code', 'city', 'state', 'bac_name', 'bac_year', 'bac_mention', 'bac_realname', 'last_facility_name', 'last_facility_address', 'last_facility_postal_code', 'last_facility_city', 'last_facility_state', 'native_lang_name', 'first_lang_name', 'first_lang_level', 'internships', 'travels', 'it_knowledge', 'sports_interests', 'strengths', 'other_apply', 'branch', 'certified']
+```
+Réponse
+```
+        {
+            "error": "Ce champ est obligatoire",
+            "id": "branch"
+        },
+```
+---
+**Si une langue est indiquée mais son niveau ne l'est pas (ou inversement)**
+
+Réponse :
+```
+        {
+            "error": "Vous devez entrer un niveau et un nom pour cette langue",
+            "id": "third_lang_name"
+        }
+```
+---
+**Si le candidat a indiqué qu'il avait une candidature dans une autre formation sans donner plus d'information dans les champs suivant**
+```js
+['other_apply_name', 'other_apply_place', 'other_apply_apprentise']
+```
+
+Réponse :
+```
+        {
+            "error": "Vous avez indiqué que vous avez d'autre(s) candidature(s). Ce champ est donc obligatoire",
+            "id": "other_apply_place"
+        }
+```
