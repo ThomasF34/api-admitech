@@ -3,6 +3,7 @@ import PastYearExp from '../models/pastyearexp';
 import Attachment from '../models/attachment';
 import User from '../models/user';
 import logger from '../helpers/logger';
+import experiencesController from './experiences';
 
 async function getAll(): Promise<Candidature[]> {
   return Candidature.findAll({
@@ -26,11 +27,11 @@ function getById(id: number, role: string): Promise<Candidature> {
           {
             model: PastYearExp,
             as: 'experiences',
-            attributes: ['degree', 'facility_name', 'facility_place', 'mean', 'name', 'ranking', 'rating', 'year']
+            attributes: ['id', 'degree', 'facility_name', 'facility_place', 'mean', 'name', 'ranking', 'rating', 'year']
           }, {
             model: Attachment,
             as: 'attachments',
-            attributes: ['attach_type', 'url']
+            attributes: ['id', 'attach_type', 'url']
           }]
       };
       break;
@@ -84,6 +85,23 @@ async function createCandidature(user: User, params: any): Promise<Candidature |
   }
 }
 
+async function updateCandidature(cand: Candidature, params: any): Promise<Candidature | checkError[]> {
+  const [valid, errs] = isValid(params);
+  if (valid) {
+    // should update experiences. Attachments are updated through document routes
+    await Promise.all(params.experiences.map(async (exp: any) => {
+      const pastYearExp = await PastYearExp.findByPk(parseInt(exp.id));
+      if (pastYearExp !== null) return experiencesController.updateExperience(pastYearExp, exp);
+    }));
+
+    delete params.experiences;
+    delete params.attachments;
+
+    return cand.update(params);
+  } else {
+    return errs;
+  }
+}
 
 interface checkError {
   id: string,
@@ -91,16 +109,16 @@ interface checkError {
 }
 
 function isValid(reqBody: any): [boolean, checkError[]] {
-  if (<boolean>reqBody.draft) {
+  if (reqBody.status === 'brouillon') {
     return [true, []];
   } else {
     let errs: checkError[] = [];
 
     // Check if all information are correct TODO
-    errs.push({ id: 'first_name', error: 'Une erreur' });
+    // errs.push({ id: 'first_name', error: 'Une erreur' });
 
     return errs.length === 0 ? [true, []] : [false, errs];
   }
 }
 
-export = { getAll, getById, createCandidature }
+export = { getAll, getById, createCandidature, updateCandidature }

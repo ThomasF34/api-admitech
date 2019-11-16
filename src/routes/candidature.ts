@@ -62,15 +62,56 @@ candidatureRouter.post('/', [checkJwt], async (req: Request, res: Response) => {
   } else {
     //role guard
     if (user!.role !== 'eleve') return res.status(403).send('Vous ne pouvez pas créer une candidature sans être élève');
+    delete params.status; //student can see status but cannot update it
+    if (params.draft === 'false') params.status = 'transmis';
+    else params.status = 'brouillon';
+  }
+
+  try {
+    const creationResponse = await candidatureController.createCandidature(user!, params);
+    if (creationResponse instanceof Candidature) {
+      res.sendStatus(201);
+    } else {
+      res
+        .status(400)
+        .json({ errors: creationResponse });
+    }
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+candidatureRouter.put('/:id', [checkJwt], async (req: Request, res: Response) => {
+  const params = req.body;
+  const userId = res.locals.user.id;
+  const user = await User.findByPk(userId);
+  const id = req.params.id;
+  if (user === undefined) {
+    logger.error(`User ${userId} not found while trying to create an application`);
+    res
+      .status(404)
+      .send('Utilisateur non trouvé');
+  } else {
+    //role guards
+    if (!['eleve', 'administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration et un élève peuvent modifier une candidature');
+    const cand = await candidatureController.getById(parseInt(id), user!.role);
+    if (cand === null) return res.status(404).json(`La candidature ${id} n'a pas été trouvée`);
+    else if (user!.role === 'eleve') {
+      if (cand.UserId !== userId) return res.status(403).json('Les élèves ne peuvent accéder qu\'à leurs propres candidatures');
+      if (!['brouillon', 'dossier incomplet'].includes(cand.status)) return res.status(403).json('Vous ne pouvez pas mettre à jour votre candidature si celle si est déjà transmise');
+      delete params.status; //student can see status but cannot update it
+    }
+    if (cand.status === 'brouillon' && !(<boolean>params.draft)) params.status = 'transmis';
+    //end of guards
 
     try {
-      const creationResponse = await candidatureController.createCandidature(user!, params);
-      if (creationResponse instanceof Candidature) {
-        res.sendStatus(201);
+      const updateResponse = await candidatureController.updateCandidature(cand, params);
+      if (updateResponse instanceof Candidature) {
+        res.sendStatus(200);
       } else {
         res
           .status(400)
-          .json({ errors: creationResponse });
+          .json({ errors: updateResponse });
       }
     } catch (err) {
       res.status(500).send(err.message);

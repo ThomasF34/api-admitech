@@ -4,6 +4,7 @@
   "attachments": [
     {
       "attach_type": "cover_letter",
+      "id": 1,
       "url": "www.google.fr"
     }
   ],
@@ -22,7 +23,8 @@
     {
       "degree": false,
       "facility_name": "une ecole",
-      "facility_place": "a montpellier",
+      "facility_place": "a Marseille",
+      "id": 1,
       "mean": "10",
       "name": "une formation",
       "ranking": "4/200",
@@ -54,8 +56,9 @@
   "second_lang_name": "italien",
   "sports_interests": "du sport ? ",
   "state": "france",
-  "strengths": "mhhhh....",
+  "strengths": "I forgot to indicate all my super strenghts !!",
   "third_lang_level": null,
   "third_lang_name": null,
-  "travels": "j'ai aussi voyagé"
+  "travels": "j'ai aussi voyagé",
+  "id": 1
 }
