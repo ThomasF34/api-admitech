@@ -114,11 +114,45 @@ function isValid(reqBody: any): [boolean, checkError[]] {
   } else {
     let errs: checkError[] = [];
 
-    // Check if all information are correct TODO
-    // errs.push({ id: 'first_name', error: 'Une erreur' });
+    // Check if all information are correct
+
+    // Mandatory fields
+    const mandatory = ['first_name', 'last_name', 'phone', 'first_name', 'last_name', 'nationnality', 'birth_date', 'birth_place', 'family_status', 'address', 'postal_code', 'city', 'state', 'bac_name', 'bac_year', 'bac_mention', 'bac_realname', 'last_facility_name', 'last_facility_address', 'last_facility_postal_code', 'last_facility_city', 'last_facility_state', 'native_lang_name', 'first_lang_name', 'first_lang_level', 'internships', 'travels', 'it_knowledge', 'sports_interests', 'strengths', 'other_apply', 'branch', 'certified'];
+
+    errs = errs.concat(verifyMandatoryFields(reqBody, mandatory, 'Ce champ est obligatoire'));
+
+    // Coherent language level and name
+    ['second', 'third'].forEach(prefix => {
+      if (
+        (hasProperty(reqBody, `${prefix}_lang_name`) && !hasProperty(reqBody, `${prefix}_lang_level`)) ||
+        (!hasProperty(reqBody, `${prefix}_lang_name`) && hasProperty(reqBody, `${prefix}_lang_level`))
+      ) {
+        errs.push({ id: `${prefix}_lang_name`, error: 'Vous devez entrer un niveau et un nom pour cette langue' });
+      }
+    });
+
+    // Other application
+    if (<boolean>reqBody.other_apply) {
+      errs = errs.concat(
+        verifyMandatoryFields(reqBody, ['other_apply_name', 'other_apply_place', 'other_apply_apprentise'], 'Vous avez indiqué que vous avez d\'autre(s) candidature(s). Ce champ est donc obligatoire')
+      );
+    }
 
     return errs.length === 0 ? [true, []] : [false, errs];
   }
 }
+
+const hasProperty = (obj: any, field: string) => Object.prototype.hasOwnProperty.call(obj, field);
+
+const verifyMandatoryFields = (obj: any, mandatories: string[], message: string): checkError[] => {
+  return mandatories
+    .filter(field => !Object.prototype.hasOwnProperty.call(obj, field))
+    .map((missingField: string) => {
+      return {
+        id: missingField,
+        error: message
+      };
+    });
+};
 
 export = { getAll, getById, createCandidature, updateCandidature }

@@ -63,8 +63,7 @@ candidatureRouter.post('/', [checkJwt], async (req: Request, res: Response) => {
     //role guard
     if (user!.role !== 'eleve') return res.status(403).send('Vous ne pouvez pas créer une candidature sans être élève');
     delete params.status; //student can see status but cannot update it
-    if (params.draft === 'false') params.status = 'transmis';
-    else params.status = 'brouillon';
+    params.status = <boolean>params.draft ? 'brouillon' : 'transmis';
   }
 
   try {

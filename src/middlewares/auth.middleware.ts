@@ -29,8 +29,12 @@ const checkJwt = (req: Request, res: Response, next: NextFunction) => {
       res.end();
     }
   } catch (error) {
-    logger.error(['Error while checking JWT', error]);
-    res.sendStatus(500);
+    if (error instanceof jwt.TokenExpiredError) {
+      res.status(400).json('Token expired');
+    } else {
+      logger.error(['Error while checking JWT', error]);
+      res.sendStatus(500);
+    }
     res.end();
   }
 };
