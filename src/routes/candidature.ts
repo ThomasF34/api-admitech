@@ -4,8 +4,7 @@ import Candidature from '../models/candidature';
 import User from '../models/user';
 import checkJwt from '../middlewares/auth.middleware';
 import logger from '../helpers/logger';
-import Attachment from '../models/attachment';
-import PastYearExp from '../models/pastyearexp';
+
 const candidatureRouter = Router();
 
 candidatureRouter.get('/', [checkJwt], async (req: Request, res: Response) => {
@@ -57,57 +56,67 @@ candidatureRouter.post('/', [checkJwt], async (req: Request, res: Response) => {
   const user = await User.findByPk(userId);
   if (user === undefined) {
     logger.error(`User ${userId} not found while trying to create an application`);
-    res.status(404).send('Utilisateur non trouvé');
+    res
+      .status(404)
+      .send('Utilisateur non trouvé');
   } else {
     //role guard
     if (user!.role !== 'eleve') return res.status(403).send('Vous ne pouvez pas créer une candidature sans être élève');
+    delete params.status; //student can see status but cannot update it
+    params.status = <boolean>params.draft ? 'brouillon' : 'transmis';
+  }
 
-    const [valid, errs] = isValid(params);
-    if (valid) {
-      const attachments = params.attachments;
-      const experiences = params.experiences;
-      delete params.attachments;
-      delete params.experiences;
-      user!.createCandidature(params)
-        .then(async cand => {
-          //We need to create each attachment and experiences
-          const promises: Promise<Attachment | PastYearExp>[] = [];
-
-          if (attachments !== undefined) promises.push(attachments.map((attach: any) => cand.createAttachment(attach)));
-          if (experiences !== undefined) promises.push(experiences.map((exp: any) => cand.createExperience(exp)));
-
-          await Promise.all(promises);
-
-          res.status(201).json(cand);
-        })
-        .catch(err => {
-          logger.error(['Error while creating an application', err]);
-          res.status(500).send(err.message);
-        });
+  try {
+    const creationResponse = await candidatureController.createCandidature(user!, params);
+    if (creationResponse instanceof Candidature) {
+      res.sendStatus(201);
     } else {
       res
         .status(400)
-        .json({ errors: errs });
+        .json({ errors: creationResponse });
+    }
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+candidatureRouter.put('/:id', [checkJwt], async (req: Request, res: Response) => {
+  const params = req.body;
+  const userId = res.locals.user.id;
+  const user = await User.findByPk(userId);
+  const id = req.params.id;
+  if (user === undefined) {
+    logger.error(`User ${userId} not found while trying to create an application`);
+    res
+      .status(404)
+      .send('Utilisateur non trouvé');
+  } else {
+    //role guards
+    if (!['eleve', 'administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration et un élève peuvent modifier une candidature');
+    const cand = await candidatureController.getById(parseInt(id), user!.role);
+    if (cand === null) return res.status(404).json(`La candidature ${id} n'a pas été trouvée`);
+    else if (user!.role === 'eleve') {
+      if (cand.UserId !== userId) return res.status(403).json('Les élèves ne peuvent accéder qu\'à leurs propres candidatures');
+      if (!['brouillon', 'dossier incomplet'].includes(cand.status)) return res.status(403).json('Vous ne pouvez pas mettre à jour votre candidature si celle si est déjà transmise');
+      delete params.status; //student can see status but cannot update it
+    }
+    if (cand.status === 'brouillon' && !(<boolean>params.draft)) params.status = 'transmis';
+    //end of guards
+
+    try {
+      const updateResponse = await candidatureController.updateCandidature(cand, params);
+      if (updateResponse instanceof Candidature) {
+        res.sendStatus(200);
+      } else {
+        res
+          .status(400)
+          .json({ errors: updateResponse });
+      }
+    } catch (err) {
+      res.status(500).send(err.message);
     }
   }
 });
 
-interface checkError {
-  id: string,
-  error: string
-}
-
-function isValid(reqBody: any): [boolean, checkError[]] {
-  if (<boolean>reqBody.draft) {
-    return [true, []];
-  } else {
-    let errs: checkError[] = [];
-
-    // Check if all information are correct TODO
-    errs.push({ id: 'first_name', error: 'Une erreur' });
-
-    return errs.length === 0 ? [true, []] : [false, errs];
-  }
-}
 
 export = candidatureRouter;
