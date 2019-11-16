@@ -66,6 +66,20 @@ Chaque route peut renvoyer un code 500 en cas d'erreur du côté du serveur
   * 200 - Utilisateur connecté. Contient `token`
   * 404 - Utilisateur non trouvé ou mot de passe incorrect. Pour des raisons de sécurité, c'est la même erreur qui est renvoyée dans les deux cas.
 
+## Documents
+
+- [x] DELETE - `/candidature/:candId/document/:docId` - Supprime une piece jointe
+  * 204 - Pièce jointe supprimée
+  * 401 - L'utilisateur doit être connecté
+  * 404 - La candidature ou la pièce n'ont pas été trouvée
+  * 403 - Interdit
+
+- [ ] POST - `/document/upload` - Obtention d'une adresse s3 signée
+  * BODY - Doit contenir `fileName` et `fileType`
+  * 200 - URL renvoyée. Contient `url`
+  * 401 - L'utilisateur doit être connecté
+  * 403 - Interdit
+
 
 ### Candidature GET ou POST
 
