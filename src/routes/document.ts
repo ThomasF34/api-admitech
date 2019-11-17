@@ -49,6 +49,13 @@ documentRouter.get('/access', [checkJwt], async (req: Request, res: Response) =>
     //guards
     if (!['eleve', 'administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration et un élève peuvent accéder aux pièces jointes');
     if (key === null || key === undefined) return res.status(400).send('Vous devez donner une clé de fichier');
+    if (user!.role === 'eleve') {
+      const a = await Promise.all((await user!.getCandidatures()).map(cand => cand.getAttachments()));
+      if (!a.flat().map(attach => attach.key).includes(key)) {
+        logger.warn(`User ${userId} tried to access ressource ${key} while it is not part of its attachment`);
+        return res.status(403).send('Les élèves ne peuvent accéder qu\'a leurs propres pièces jointes');
+      }
+    }
 
     logger.info(`User ${userId} is asking to access the file ${key}`);
 
