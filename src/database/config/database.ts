@@ -1,6 +1,8 @@
 import Sequelize from 'sequelize';
 import logger from '../../helpers/logger';
 const dbConfig = require('./config');
+const pg = require('pg');
+delete pg.native;
 
 
 const env = process.env.NODE_ENV || 'development';

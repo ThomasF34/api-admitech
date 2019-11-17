@@ -41,8 +41,11 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
       res.sendStatus(404);
     }
   } catch (error) {
-    logger.info(error);
-    res.sendStatus(401);
+    logger.error(['Error while connecting a user', error]);
+    res
+      .status(500)
+      .json('Une erreur s\'est produite');
+
   }
 });
 
@@ -66,7 +69,10 @@ authRouter.post('/inscrire', async (req: Request, res: Response) => {
       res.status(400).json('Email déjà utilisé');
     }
   } catch (e) {
-    res.status(500).json(e.message);
+    logger.error(['Error while registering user', e]);
+    res
+      .status(500)
+      .json('Une erreur s\'est produite');
   }
 });
 
