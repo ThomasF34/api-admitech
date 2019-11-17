@@ -4,7 +4,7 @@ import { Model, DataTypes } from 'sequelize';
 class Attachment extends Model {
   private id!: number;
   public attach_type!: string;
-  public url!: string;
+  public key!: string;
 }
 
 Attachment.init({
@@ -16,7 +16,7 @@ Attachment.init({
   attach_type: {
     type: DataTypes.STRING,
   },
-  url: {
+  key: {
     type: DataTypes.STRING
   }
 }, {

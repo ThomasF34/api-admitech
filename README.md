@@ -74,9 +74,15 @@ Chaque route peut renvoyer un code 500 en cas d'erreur du côté du serveur
   * 404 - La candidature ou la pièce n'ont pas été trouvée
   * 403 - Interdit
 
-- [ ] POST - `/document/upload` - Obtention d'une adresse s3 signée
+- [x] POST - `/document/upload` - Obtention d'une adresse s3 signée pour upload un fichier
   * BODY - Doit contenir `fileName` et `fileType`
   * 200 - URL renvoyée. Contient `url`
+  * 401 - L'utilisateur doit être connecté
+  * 403 - Interdit
+
+- [x] GET - `/document/access?key=<fileKey>` - Obtention d'une adresse s3 signée pour accéder à un fichier
+  * 200 - URL renvoyée
+  * 400 - Le paramètre `key` est obligatoire
   * 401 - L'utilisateur doit être connecté
   * 403 - Interdit
 
@@ -97,7 +103,7 @@ POST et GET sous forme de JSON
     "attachments": [
         {
             "attach_type": "cover_letter",
-            "url": "www.google.fr"
+            "key": "1234.pdf"
         }
     ],
     "bac_mention": "bien",
@@ -206,7 +212,7 @@ await queryInterface.addConstraint('users', ['role'], {
 ```
 
 
-Contrainte sur les attachments : 
+Contrainte sur les attachments :
 ```
  return await queryInterface.addConstraint('attachments', ['attach_type'], {
       type: 'check',

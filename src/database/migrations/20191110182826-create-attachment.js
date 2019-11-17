@@ -11,7 +11,7 @@ module.exports = {
       attach_type: {
         type: Sequelize.STRING
       },
-      url: {
+      key: {
         type: Sequelize.STRING
       },
       candidature_id: {

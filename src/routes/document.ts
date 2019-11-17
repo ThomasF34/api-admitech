@@ -24,13 +24,42 @@ documentRouter.post('/upload', [checkJwt], async (req: Request, res: Response) =
     logger.info(`User ${userId} is asking to add a new file ${fileName}.${fileType}`);
 
     try {
-      const data = await documentController.generateSignedUrl(fileName, fileType);
-      logger.info(['SignedUrl has been generated', data.signedUrl, data.url, fileName, fileType]);
+      const data = await documentController.generateUploadSignedUrl(fileName, fileType);
+      logger.info(['Signed url has been generated to upload file', data.signedUrl, data.key, fileName, fileType]);
       return res
         .status(200)
         .send(data);
     } catch (err) {
-      logger.error(['Error while getting AWS S3 Signed URL', err]);
+      logger.error(['Error while getting AWS S3 PUT Signed URL', err]);
+      return res.status(500).json('Une erreur s\'est produite');
+    }
+  }
+});
+
+documentRouter.get('/access', [checkJwt], async (req: Request, res: Response) => {
+  const key = req.query.key;
+  const userId = res.locals.user.id;
+  const user = await User.findByPk(userId);
+  if (user === undefined) {
+    logger.error(`User ${userId} not found while trying to create an application`);
+    res
+      .status(404)
+      .send('Utilisateur non trouvé');
+  } else {
+    //guards
+    if (!['eleve', 'administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration et un élève peuvent accéder aux pièces jointes');
+    if (key === null || key === undefined) return res.status(400).send('Vous devez donner une clé de fichier');
+
+    logger.info(`User ${userId} is asking to access the file ${key}`);
+
+    try {
+      const data = await documentController.generateGetSignedUrl(key);
+      logger.info([`Signed_URL has been generated to access ${key}`, data]);
+      return res
+        .status(200)
+        .send(data);
+    } catch (err) {
+      logger.error(['Error while getting AWS S3 GET Signed URL', err]);
       return res.status(500).json('Une erreur s\'est produite');
     }
   }
