@@ -8,6 +8,7 @@ import offreRouter from './offre';
 import authRouter from './auth';
 import profileRouter from './profile';
 
+
 router.use('/candidature', candidatureRouter);
 router.use('/evenement', evenementRouter);
 router.use('/qcm', qcmRouter);
