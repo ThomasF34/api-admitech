@@ -11,12 +11,12 @@ aws.config.update({
 
 interface AwsUrlPair {
   signedUrl: string;
-  url: string;
+  key: string;
 }
 
 const S3_BUCKET = process.env.AWS_S3_BUCKET;
 
-async function generateSignedUrl(fileName: string, fileType: string): Promise<AwsUrlPair> {
+async function generateUploadSignedUrl(fileName: string, fileType: string): Promise<AwsUrlPair> {
   const s3 = new aws.S3();
   //TODO CORRECT hash
   const s3_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -29,7 +29,18 @@ async function generateSignedUrl(fileName: string, fileType: string): Promise<Aw
     ContentType: fileType,
   };
 
-  return process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' ? s3.getSignedUrlPromise('putObject', s3_params).then(signedUrl => { return { signedUrl: signedUrl, url: `https://${S3_BUCKET}.s3.amazonaws.com/${s3_complete_name}` }; }) : new Promise((res) => res({ signedUrl: 'not in test mode', url: 'www.google.fr' }));
+  return process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' ? s3.getSignedUrlPromise('putObject', s3_params).then(signedUrl => { return { signedUrl: signedUrl, key: s3_complete_name }; }) : new Promise((res) => res({ signedUrl: 'not in test mode', key: '1234.pdf' }));
 }
 
-export = { generateSignedUrl };
+async function generateGetSignedUrl(key: string): Promise<string> {
+  const s3 = new aws.S3();
+
+  const s3_params = {
+    Bucket: S3_BUCKET,
+    Key: key,
+    Expires: 60,
+  };
+
+  return process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' ? s3.getSignedUrlPromise('getObject', s3_params) : new Promise((res) => res(`link_to_access_to_${key}`));
+}
+export = { generateGetSignedUrl, generateUploadSignedUrl };

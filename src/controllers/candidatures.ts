@@ -31,7 +31,7 @@ function getById(id: number, role: string): Promise<Candidature> {
           }, {
             model: Attachment,
             as: 'attachments',
-            attributes: ['id', 'attach_type', 'url']
+            attributes: ['id', 'attach_type', 'key']
           }]
       };
       break;
@@ -41,11 +41,11 @@ function getById(id: number, role: string): Promise<Candidature> {
           {
             model: PastYearExp,
             as: 'experiences',
-            attributes: ['degree', 'facility_name', 'facility_place', 'mean', 'name', 'ranking', 'rating', 'year']
+            attributes: ['id', 'degree', 'facility_name', 'facility_place', 'mean', 'name', 'ranking', 'rating', 'year']
           }, {
             model: Attachment,
             as: 'attachments',
-            attributes: ['attach_type', 'url']
+            attributes: ['id', 'attach_type', 'key']
           }]
       };
       break;
