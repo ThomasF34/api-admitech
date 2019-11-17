@@ -69,7 +69,7 @@ candidatureRouter.post('/', [checkJwt], async (req: Request, res: Response) => {
   try {
     const creationResponse = await candidatureController.createCandidature(user!, params);
     if (creationResponse instanceof Candidature) {
-      res.sendStatus(201);
+      res.status(201).json(await candidatureController.getById(creationResponse.id, user!.role));
     } else {
       res
         .status(400)

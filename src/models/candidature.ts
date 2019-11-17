@@ -4,7 +4,7 @@ import PastYearExp from './pastyearexp';
 import Attachment from './attachment';
 
 class Candidature extends Model {
-  private id!: number;
+  public id!: number;
   public phone!: string;
   public draft!: boolean;
   public first_name!: string;
