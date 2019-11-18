@@ -36,7 +36,7 @@ module.exports = {
 
     await queryInterface.bulkInsert('candidatures', [{
       user_id: 1,
-      draft: false,
+      draft: true,
       first_name: 'Alice',
       last_name: 'Dupond',
       nationnality: 'Français',
@@ -105,7 +105,7 @@ module.exports = {
     await queryInterface.bulkInsert('attachments', [
       {
         attach_type: 'cover_letter',
-        url: 'www.google.fr',
+        key: '1234.pdf',
         candidature_id: candidatureRow[0].id,
         created_at: new Date(),
         updated_at: new Date()

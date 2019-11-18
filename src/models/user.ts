@@ -1,5 +1,5 @@
 import db from '../database/config/database';
-import { Model, DataTypes, HasManyCreateAssociationMixin } from 'sequelize';
+import { Model, DataTypes, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin } from 'sequelize';
 import Candidature from './candidature';
 
 class User extends Model {
@@ -11,7 +11,7 @@ class User extends Model {
   public role!: string;
 
   public createCandidature!: HasManyCreateAssociationMixin<Candidature>;
-
+  public getCandidatures!: HasManyGetAssociationsMixin<Candidature>;
 }
 
 User.init({

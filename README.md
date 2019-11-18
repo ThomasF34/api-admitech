@@ -31,7 +31,7 @@ Chaque route peut renvoyer un code 500 en cas d'erreur du côté du serveur
 ## Candidatures
 
 - [x] GET - `/candidature` - Renvoie l'ensemble des candidatures
-  * 200 - Quelques attributs pour toutes les candidatures : `status`, `branch`, `first_name`, `last_name`
+  * 200 - Quelques attributs pour toutes les candidatures : `status`, `branch`, `first_name`, `last_name`, `jury` : [{first_name: <firstname>, last_name: <lastname>}], `mark`, `mcq` : id du qcm assigné, s'il existe
   * 204 - Pas de candidature à afficher
   * 401 - L'utilisateur doit être connecté
   * 403 - L'utilisateur connecté ne peut accéder à la ressource
@@ -66,6 +66,26 @@ Chaque route peut renvoyer un code 500 en cas d'erreur du côté du serveur
   * 200 - Utilisateur connecté. Contient `token`
   * 404 - Utilisateur non trouvé ou mot de passe incorrect. Pour des raisons de sécurité, c'est la même erreur qui est renvoyée dans les deux cas.
 
+## Documents
+
+- [x] DELETE - `/candidature/:candId/document/:docId` - Supprime une piece jointe
+  * 204 - Pièce jointe supprimée
+  * 401 - L'utilisateur doit être connecté
+  * 404 - La candidature ou la pièce n'ont pas été trouvée
+  * 403 - Interdit
+
+- [x] POST - `/document/upload` - Obtention d'une adresse s3 signée pour upload un fichier
+  * BODY - Doit contenir `fileName` et `fileType`
+  * 200 - URL renvoyée. Contient `url`
+  * 401 - L'utilisateur doit être connecté
+  * 403 - Interdit
+
+- [x] GET - `/document/access?key=<fileKey>` - Obtention d'une adresse s3 signée pour accéder à un fichier
+  * 200 - URL renvoyée
+  * 400 - Le paramètre `key` est obligatoire
+  * 401 - L'utilisateur doit être connecté
+  * 403 - Interdit
+
 
 ### Candidature GET ou POST
 
@@ -83,7 +103,7 @@ POST et GET sous forme de JSON
     "attachments": [
         {
             "attach_type": "cover_letter",
-            "url": "www.google.fr"
+            "key": "1234.pdf"
         }
     ],
     "bac_mention": "bien",
@@ -192,7 +212,7 @@ await queryInterface.addConstraint('users', ['role'], {
 ```
 
 
-Contrainte sur les attachments : 
+Contrainte sur les attachments :
 ```
  return await queryInterface.addConstraint('attachments', ['attach_type'], {
       type: 'check',
