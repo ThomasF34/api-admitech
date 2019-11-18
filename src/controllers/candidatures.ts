@@ -4,12 +4,15 @@ import Attachment from '../models/attachment';
 import User from '../models/user';
 import logger from '../helpers/logger';
 import experiencesController from './experiences';
+import { Op } from 'sequelize';
 
 async function getAll(): Promise<Candidature[]> {
   return Candidature.findAll({
     attributes: ['status', 'branch', 'first_name', 'last_name'],
     where: {
-      draft: false
+      status: {
+        [Op.gte]: 2,
+      }
     }
   });
 }
@@ -109,7 +112,7 @@ interface checkError {
 }
 
 function isValid(reqBody: any): [boolean, checkError[]] {
-  if (reqBody.status === 'brouillon') {
+  if (reqBody.status === 1) {
     return [true, []];
   } else {
     let errs: checkError[] = [];

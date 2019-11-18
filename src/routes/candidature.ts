@@ -63,7 +63,7 @@ candidatureRouter.post('/', [checkJwt], async (req: Request, res: Response) => {
     //role guard
     if (user!.role !== 'eleve') return res.status(403).send('Vous ne pouvez pas créer une candidature sans être élève');
     delete params.status; //student can see status but cannot update it
-    params.status = <boolean>params.draft ? 'brouillon' : 'transmis';
+    params.status = <boolean>params.draft ? 1 : 2;
   }
 
   try {
@@ -97,10 +97,10 @@ candidatureRouter.put('/:id', [checkJwt], async (req: Request, res: Response) =>
     if (cand === null) return res.status(404).json(`La candidature ${id} n'a pas été trouvée`);
     else if (user!.role === 'eleve') {
       if (cand.UserId !== userId) return res.status(403).json('Les élèves ne peuvent accéder qu\'à leurs propres candidatures');
-      if (!['brouillon', 'dossier incomplet'].includes(cand.status)) return res.status(403).json('Vous ne pouvez pas mettre à jour votre candidature si celle si est déjà transmise');
+      if (![1, 3].includes(cand.status)) return res.status(403).json('Vous ne pouvez pas mettre à jour votre candidature si celle si est déjà transmise');
       delete params.status; //student can see status but cannot update it
     }
-    if (cand.status === 'brouillon' && !(<boolean>params.draft)) params.status = 'transmis';
+    if (cand.status === 1 && !(<boolean>params.draft)) params.status = 'transmis';
     //end of guards
 
     try {

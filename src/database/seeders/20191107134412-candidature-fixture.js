@@ -74,7 +74,7 @@ module.exports = {
       other_apply_apprentise: null,
       candidate_comment: 'je suis content ',
       admin_comment: 'eleve a rejeter',
-      status: 'REFUSE',
+      status: 2,
       branch: 'do',
       certified: true,
       certified_at: new Date(),

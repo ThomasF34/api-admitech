@@ -44,7 +44,7 @@ class Candidature extends Model {
   public other_apply_apprentise!: boolean;
   public candidate_comment!: string;
   public admin_comment!: string;
-  public status!: string;
+  public status!: number;
   public branch!: string;
   public certified!: boolean;
   public certified_at!: Date;
@@ -102,7 +102,7 @@ Candidature.init({
   other_apply_apprentise: DataTypes.BOOLEAN,
   candidate_comment: DataTypes.TEXT,
   admin_comment: DataTypes.TEXT,
-  status: DataTypes.STRING,
+  status: DataTypes.INTEGER,
   branch: DataTypes.STRING,
   certified: DataTypes.BOOLEAN,
   certified_at: DataTypes.DATE,
