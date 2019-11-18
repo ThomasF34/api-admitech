@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import aws from 'aws-sdk';
-import logger from '../helpers/logger';
 
 aws.config.update({
   region: 'eu-west-1',
