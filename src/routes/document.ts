@@ -24,7 +24,7 @@ documentRouter.post('/upload', [checkJwt], async (req: Request, res: Response) =
     logger.info(`User ${userId} is asking to add a new file ${fileName}.${fileType}`);
 
     try {
-      const data = await documentController.generateUploadSignedUrl(fileName, fileType);
+      const data = await documentController.generateUploadSignedUrl(fileType, userId);
       logger.info(['Signed url has been generated to upload file', data.signedUrl, data.key, fileName, fileType]);
       return res
         .status(200)
@@ -35,6 +35,12 @@ documentRouter.post('/upload', [checkJwt], async (req: Request, res: Response) =
     }
   }
 });
+
+function decrypt(key: string) {
+  const array = key.split(':::');
+  if (array.length !== 2) throw new Error;
+  else return parseInt(array[0]);
+}
 
 documentRouter.get('/access', [checkJwt], async (req: Request, res: Response) => {
   const key = req.query.key;
@@ -50,10 +56,15 @@ documentRouter.get('/access', [checkJwt], async (req: Request, res: Response) =>
     if (!['eleve', 'administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration et un élève peuvent accéder aux pièces jointes');
     if (key === null || key === undefined) return res.status(400).send('Vous devez donner une clé de fichier');
     if (user!.role === 'eleve') {
-      const a = await Promise.all((await user!.getCandidatures()).map(cand => cand.getAttachments()));
-      if (!a.flat().map(attach => attach.key).includes(key)) {
-        logger.warn(`User ${userId} tried to access ressource ${key} while it is not part of its attachment`);
-        return res.status(403).send('Les élèves ne peuvent accéder qu\'a leurs propres pièces jointes');
+      try {
+        const decryptedKey = decrypt(key);
+        if (decryptedKey !== userId) {
+          logger.warn(`User ${userId} tried to access ressource ${key} while it is not part of its attachment`);
+          return res.status(403).send('Les élèves ne peuvent accéder qu\'a leurs propres pièces jointes');
+        }
+      } catch (e) {
+        logger.error(['Error when decrypting key', key]);
+        res.status(500).json('Une erreur s\'est produite');
       }
     }
 
@@ -67,6 +78,47 @@ documentRouter.get('/access', [checkJwt], async (req: Request, res: Response) =>
         .send(data);
     } catch (err) {
       logger.error(['Error while getting AWS S3 GET Signed URL', err]);
+      return res.status(500).json('Une erreur s\'est produite');
+    }
+  }
+});
+
+documentRouter.delete('/', [checkJwt], async (req: Request, res: Response) => {
+  const key = req.query.key;
+  const userId = res.locals.user.id;
+  const user = await User.findByPk(userId);
+  if (user === undefined) {
+    logger.error(`User ${userId} not found while trying to create an application`);
+    res
+      .status(404)
+      .send('Utilisateur non trouvé');
+  } else {
+    //guards
+    if (!['eleve', 'administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration et un élève peuvent supprimer des pièces jointes');
+    if (key === null || key === undefined) return res.status(400).send('Vous devez donner une clé de fichier');
+    if (user!.role === 'eleve') {
+      try {
+        const decryptedKey = decrypt(key);
+        if (decryptedKey !== userId) {
+          logger.warn(`User ${userId} tried to delete ressource ${key} while it is not part of its attachment`);
+          return res.status(403).send('Les élèves ne peuvent supprimer que leurs propres pièces jointes');
+        }
+      } catch (e) {
+        logger.error(['Error when decrypting key', key]);
+        res.status(500).json('Une erreur s\'est produite');
+      }
+    }
+
+    logger.info(`User ${userId} is asking to delete the file ${key}`);
+
+    try {
+      const data = await documentController.deleteAttachment(key);
+      logger.info([`Doc ${key} has been deleted`, data]);
+      return res
+        .status(200)
+        .send(data);
+    } catch (err) {
+      logger.error(['Error while deleting AWS S3 file', err]);
       return res.status(500).json('Une erreur s\'est produite');
     }
   }

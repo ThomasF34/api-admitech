@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import aws from 'aws-sdk';
+import logger from '../helpers/logger';
 
 aws.config.update({
   region: 'eu-west-1',
@@ -16,10 +17,9 @@ interface AwsUrlPair {
 
 const S3_BUCKET = process.env.AWS_S3_BUCKET;
 
-async function generateUploadSignedUrl(fileName: string, fileType: string): Promise<AwsUrlPair> {
+async function generateUploadSignedUrl(fileType: string, userId: number): Promise<AwsUrlPair> {
   const s3 = new aws.S3();
-  //TODO CORRECT hash
-  const s3_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  const s3_key = `${userId}:::${new Date().toISOString()}`;
   const s3_complete_name = `${s3_key}.${fileType}`;
 
   const s3_params = {
@@ -43,4 +43,16 @@ async function generateGetSignedUrl(key: string): Promise<string> {
 
   return process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' ? s3.getSignedUrlPromise('getObject', s3_params) : new Promise((res) => res(`link_to_access_to_${key}`));
 }
-export = { generateGetSignedUrl, generateUploadSignedUrl };
+
+async function deleteAttachment(key: string): Promise<string> {
+  const s3 = new aws.S3();
+
+  const s3_params: aws.S3.Types.DeleteObjectRequest = {
+    Bucket: S3_BUCKET || '',
+    Key: key,
+  };
+
+  return process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' ? s3.deleteObject(s3_params).promise().then(() => 'Successfully Deleted') : new Promise((res) => res(`link_to_access_to_${key}`));
+}
+
+export = { generateGetSignedUrl, generateUploadSignedUrl, deleteAttachment };
