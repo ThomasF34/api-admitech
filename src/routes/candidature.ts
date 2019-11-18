@@ -98,7 +98,7 @@ candidatureRouter.put('/:id', [checkJwt], async (req: Request, res: Response) =>
     if (cand === null) return res.status(404).json(`La candidature ${id} n'a pas été trouvée`);
     else if (user!.role === 'eleve') {
       if (cand.UserId !== userId) return res.status(403).json('Les élèves ne peuvent accéder qu\'à leurs propres candidatures');
-      if (!['brouillon', 'dossier incomplet'].includes(cand.status)) return res.status(403).json('Vous ne pouvez pas mettre à jour votre candidature si celle si est déjà transmise');
+      if (!['brouillon', 'dossier incomplet'].includes(cand.status)) return res.status(403).json('Vous ne pouvez pas mettre à jour votre candidature si celle-ci est déjà transmise');
       delete params.status; //student can see status but cannot update it
     }
     if (cand.status === 'brouillon' && !(<boolean>params.draft)) params.status = 'transmis';
@@ -136,7 +136,7 @@ candidatureRouter.delete('/:candId/document/:attachId', [checkJwt], async (req: 
     if (!['eleve', 'administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration et un élève peuvent supprimer des pièces jointes');
     else if (user!.role === 'eleve') {
       if (cand.UserId !== userId) return res.status(403).json('Les élèves ne peuvent accéder qu\'à leurs propres candidatures');
-      if (!['brouillon', 'dossier incomplet'].includes(cand.status)) return res.status(403).json('Vous ne pouvez pas mettre à jour votre candidature si celle si est déjà transmise');
+      if (!['brouillon', 'dossier incomplet'].includes(cand.status)) return res.status(403).json('Vous ne pouvez pas mettre à jour votre candidature si celle-ci est déjà transmise');
     }
     //end of guards
 

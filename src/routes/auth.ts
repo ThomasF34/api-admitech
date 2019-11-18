@@ -22,7 +22,7 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
     if (user != null) {
       //Check if encrypted password match
       if (!checkIfUnencryptedPasswordIsValid(password, user.password)) {
-        res.sendStatus(401);
+        res.sendStatus(404);
       } else {
         //Sing JWT, valid for 1 hour
         const token = jwt.sign({ id: user.id, role: user.role, email: user.email, first_name: user.first_name, last_name: user.last_name }, process.env.SECRET_KEY_JWT!, {
@@ -41,8 +41,8 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
       res.sendStatus(404);
     }
   } catch (error) {
-    logger.info(error);
-    res.sendStatus(401);
+    logger.error(['Error while connecting', error]);
+    res.sendStatus(500);
   }
 });
 
@@ -63,10 +63,11 @@ authRouter.post('/inscrire', async (req: Request, res: Response) => {
       logger.info(`User ${user.email} registered`);
       res.sendStatus(201);
     } else {
-      res.status(400).json('Email déjà utilisé');
+      res.status(400).json([{ id: 'email', error: 'Email déjà utilisée' }]);
     }
   } catch (e) {
-    res.status(500).json(e.message);
+    logger.error(['Error while registering', e]);
+    res.status(500).json('Une erreur s\'est produite');
   }
 });
 
