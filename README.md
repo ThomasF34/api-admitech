@@ -31,7 +31,7 @@ Chaque route peut renvoyer un code 500 en cas d'erreur du côté du serveur
 ## Candidatures
 
 - [x] GET - `/candidature` - Renvoie l'ensemble des candidatures
-  * 200 - Quelques attributs pour toutes les candidatures : `status`, `branch`, `first_name`, `last_name`
+  * 200 - Quelques attributs pour toutes les candidatures : `status`, `branch`, `first_name`, `last_name`, `jury` : [{first_name: <firstname>, last_name: <lastname>}], `mark`, `mcq` : id du qcm assigné, s'il existe
   * 204 - Pas de candidature à afficher
   * 401 - L'utilisateur doit être connecté
   * 403 - L'utilisateur connecté ne peut accéder à la ressource
