@@ -9,12 +9,15 @@ const authRouter = Router();
 //Get a text from the API and send it
 authRouter.post('/connexion', async (req: Request, res: Response) => {
   res.type('application/json');
+  //guard
+  const errs = ['email', 'password'].filter(field => !hasProperty(req.body, field));
+  if (errs.length > 0) {
+    return res.status(400).json(errs.map(missingField => { return { id: missingField, error: 'Ce champ est obligatoire' }; }));
+  }
 
-  const { email, password } = req.body;
   try {
-    if (!(email && password)) {
-      res.sendStatus(400);
-    }
+    const { email, password } = req.body;
+
     let user: User | null;
 
     user = await userController.getUserByEmail(email);
@@ -52,12 +55,18 @@ authRouter.post('/connexion', async (req: Request, res: Response) => {
 //Insert in the DB
 authRouter.post('/inscrire', async (req: Request, res: Response) => {
   res.type('application/json');
+  //guard
+  const errs = ['first_name', 'last_name', 'email', 'password'].filter(field => !hasProperty(req.body, field));
+  if (errs.length > 0) {
+    return res.status(400).json(errs.map(missingField => { return { id: missingField, error: 'Ce champ est obligatoire' }; }));
+  }
+
   try {
 
     const userToAdd = new User();
     userToAdd.email = req.body.email;
     userToAdd.last_name = req.body.last_name;
-    userToAdd.first_name = req.body.fir;
+    userToAdd.first_name = req.body.first_name;
     userToAdd.password = req.body.password;
     userToAdd.role = req.body.role;
 
@@ -76,6 +85,7 @@ authRouter.post('/inscrire', async (req: Request, res: Response) => {
   }
 });
 
+const hasProperty = (obj: any, field: string) => Object.prototype.hasOwnProperty.call(obj, field);
 
 //TODO VerifyToken
 
