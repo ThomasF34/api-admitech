@@ -2,6 +2,7 @@ import db from '../database/config/database';
 import { Model, DataTypes, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin } from 'sequelize';
 import PastYearExp from './pastyearexp';
 import Attachment from './attachment';
+import Entretien from './entretien';
 
 class Candidature extends Model {
   public id!: number;
@@ -56,6 +57,7 @@ class Candidature extends Model {
   public createAttachment!: HasManyCreateAssociationMixin<Attachment>;
   public createExperience!: HasManyCreateAssociationMixin<PastYearExp>;
   public getAttachments!: HasManyGetAssociationsMixin<Attachment>;
+  
 }
 
 Candidature.init({
