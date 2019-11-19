@@ -2,7 +2,6 @@ import db from '../database/config/database';
 import { Model, DataTypes, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin } from 'sequelize';
 import PastYearExp from './pastyearexp';
 import Attachment from './attachment';
-import Entretien from './entretien';
 
 class Candidature extends Model {
   public id!: number;
