@@ -8,7 +8,7 @@ import { Op } from 'sequelize';
 
 async function getAll(): Promise<Candidature[]> {
   return Candidature.findAll({
-    attributes: ['status', 'branch', 'first_name', 'last_name'],
+    attributes: ['id', 'status', 'branch', 'first_name', 'last_name'],
     where: {
       status: {
         [Op.gte]: 2,
