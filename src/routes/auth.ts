@@ -62,7 +62,6 @@ authRouter.post('/inscrire', async (req: Request, res: Response) => {
   }
 
   try {
-
     const userToAdd = new User();
     userToAdd.email = req.body.email;
     userToAdd.last_name = req.body.last_name;
@@ -87,6 +86,76 @@ authRouter.post('/inscrire', async (req: Request, res: Response) => {
 
 const hasProperty = (obj: any, field: string) => Object.prototype.hasOwnProperty.call(obj, field);
 
-//TODO VerifyToken
+authRouter.post('/connexionMyDash', async (req: Request, res: Response) => {
+  //guard
+  const bearerToken = <string>req.headers.authorization;
+  if (bearerToken === undefined || bearerToken === null) {
+    return res.status(400).json('Le Header Authorization est obligatoire pour se connecter avec MyDash');
+  }
+
+  const token = bearerToken.split(' ')[1];
+
+  let jwtPayload: any;
+  try {
+    jwtPayload = jwt.verify(token, process.env.MYDASH_SECRET_CLIENT!);
+  } catch (err) {
+    logger.error(['Error while checking JWT', err]);
+    return res.sendStatus(500);
+  }
+
+  const tokenErrs = ['email', 'firstname', 'lastname', 'role'].filter(field => !hasProperty(jwtPayload, field));
+  if (tokenErrs.length > 0) {
+    return res.status(400).json(tokenErrs.map(missingField => { return { id: missingField, error: 'Le token doit contenir ce champ' }; }));
+  }
+
+  if (!['teacher', 'admin'].includes(jwtPayload.role)) return res.status(400).json('La connexion MyDash est utilisable par les professeurs et membres de l\'administration uniquement');
+  //end of guards
+
+  try {
+    const user: User | null = await userController.getUserByEmail(jwtPayload.email);
+
+    if (user !== null) {
+      const token = jwt.sign({ id: user.id, role: user.role, email: user.email, first_name: user.first_name, last_name: user.last_name }, process.env.SECRET_KEY_JWT!, {
+        expiresIn: '1h'
+      });
+
+      //logging
+      logger.info(`User ${user.id} got connected via MyDash`);
+
+      //Send the jwt in the response
+      res
+        .status(200)
+        .send(token);
+    } else {
+      const role = jwtPayload.role === 'teacher' ? 'professeur' : (jwtPayload.role === 'admin' ? 'administration' : '');
+
+      const resCreation = await userController.addUser(<User>{
+        email: jwtPayload.email,
+        last_name: jwtPayload.lastname,
+        first_name: jwtPayload.firstname,
+        role: role
+      });
+
+      if (resCreation === undefined) {
+        logger.error(['Error while trying to create user via MyDash connexion route', jwtPayload]);
+        return res.status(500).json('Une erreur s\'est produite');
+      }
+
+      logger.info(`User ${resCreation!.id} created in DB following a MyDash initial connection`);
+
+      const token = jwt.sign({ id: resCreation!.id, role: resCreation!.role, email: resCreation!.email, first_name: resCreation!.first_name, last_name: resCreation!.last_name }, process.env.SECRET_KEY_JWT!, {
+        expiresIn: '1h'
+      });
+
+      res.status(200).send(token);
+    }
+  } catch (error) {
+    logger.error(['Error while connecting a user', error, error.trace]);
+    res
+      .status(500)
+      .json('Une erreur s\'est produite');
+
+  }
+});
 
 export = authRouter;
