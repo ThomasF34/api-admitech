@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('users', [{
-      id: 1,
       first_name: 'Alice',
       last_name: 'Dupond',
       email: 'email@eleve.fr',
@@ -14,7 +13,14 @@ module.exports = {
       updated_at: new Date()
     },
     {
-      id: 2,
+      first_name: 'Albert',
+      last_name: 'Dupond',
+      email: 'email@eleve2.fr',
+      password: bcrypt.hashSync('abcd', 10),
+      role: 'eleve',
+      created_at: new Date(),
+      updated_at: new Date()
+    }, {
       first_name: 'Bob',
       last_name: 'Dupond',
       email: 'email@administration.fr',
@@ -23,7 +29,6 @@ module.exports = {
       created_at: new Date(),
       updated_at: new Date()
     }, {
-      id: 3,
       first_name: 'Elisa',
       last_name: 'Dupond',
       email: 'email@entreprise.fr',
@@ -36,7 +41,7 @@ module.exports = {
 
     await queryInterface.bulkInsert('candidatures', [{
       user_id: 1,
-      draft: true,
+      draft: false,
       first_name: 'Alice',
       last_name: 'Dupond',
       nationnality: 'Français',
@@ -80,7 +85,55 @@ module.exports = {
       certified_at: new Date(),
       created_at: new Date(),
       updated_at: new Date()
-    }], {});
+    },
+    {
+      user_id: 2,
+      draft: false,
+      first_name: 'Albert',
+      last_name: 'Dupond',
+      nationnality: 'Français',
+      birth_date: new Date(),
+      birth_place: 'montpellier',
+      family_status: 'married',
+      address: 'somewhere',
+      postal_code: '34000',
+      city: 'montpellier',
+      state: 'france',
+      bac_name: 'un bac',
+      bac_year: 2009,
+      bac_mention: 'bien',
+      bac_realname: 'un super bac',
+      last_facility_name: 'un etablissement',
+      last_facility_address: 'somewhere',
+      last_facility_postal_code: '34000',
+      last_facility_city: 'montpellier',
+      last_facility_state: 'france',
+      native_lang_name: 'français',
+      first_lang_name: 'anglais',
+      second_lang_name: 'espagnol',
+      third_lang_name: null,
+      first_lang_level: 'great',
+      second_lang_level: 'great',
+      third_lang_level: null,
+      internships: 'Franchement j\'ai fait des stages trop bien',
+      travels: 'j\'ai aussi voyagé',
+      it_knowledge: 'bon là j\'ai plus d\'inspi par contre',
+      sports_interests: 'du sport ? ',
+      strengths: 'mhhhh....',
+      other_apply: false,
+      other_apply_name: null,
+      other_apply_place: null,
+      other_apply_apprentise: null,
+      candidate_comment: 'je suis content ',
+      admin_comment: 'eleve a rejeter',
+      status: 7,
+      branch: 'do',
+      certified: true,
+      certified_at: new Date(),
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    ], {});
 
     const candidatures = await queryInterface.sequelize.query(
       'SELECT id from candidatures;'
@@ -117,10 +170,12 @@ module.exports = {
     Promise.all([
       queryInterface.bulkDelete('candidatures', [{
         first_name: 'Alice',
+      }, {
+        first_name: 'Albert',
       }]),
       queryInterface.bulkDelete('past_year_exps', null),
       queryInterface.bulkDelete('attachments', null),
-      queryInterface.bulkDelete('users', [{ first_name: 'Alice' }, { first_name: 'Bob' }, { first_name: 'Elisa' }]),
+      queryInterface.bulkDelete('users', [{ first_name: 'Alice' }, { first_name: 'Albert' }, { first_name: 'Bob' }, { first_name: 'Elisa' }]),
     ]);
   }
 };
