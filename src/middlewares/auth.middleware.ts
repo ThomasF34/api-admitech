@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
+import logger = require('../helpers/logger');
 
 const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   //Get the jwt token from the head
@@ -10,28 +11,32 @@ const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   try {
     if (bearerToken != undefined) {
       const token = bearerToken.split(' ')[1];
-      jwtPayload = <any>jwt.verify(token, process.env.Secret_Key_JWT!);
-      res.locals.jwtPayload = jwtPayload;
+      jwtPayload = <any>jwt.verify(token, process.env.SECRET_KEY_JWT!);
+      res.locals.user = jwtPayload;
 
       //The token is valid for 1 hour
       //We want to send a new token on every request
-      const { idUser, login } = jwtPayload;
-      const newToken = jwt.sign({ idUser, login }, process.env.Secret_Key_JWT!, {
+      delete jwtPayload.exp;
+      delete jwtPayload.iat;
+
+      const newToken = jwt.sign(jwtPayload, process.env.SECRET_KEY_JWT!, {
         expiresIn: '1h'
       });
-      res.setHeader('tokenFormatech', newToken);
-
+      res.setHeader('token-admitech', newToken);
+      next();
     } else {
-      //If token is not valid or not existing, respond with 401 (unauthorized)
-      res.sendStatus(401);
+      res.status(401).json('User must be connected to make this request');
+      res.end();
     }
   } catch (error) {
-    //If token is not valid or not existing, respond with 401 (unauthorized)
-    res.sendStatus(401);
+    if (error instanceof jwt.TokenExpiredError) {
+      res.status(400).json('Token expired');
+    } else {
+      logger.error(['Error while checking JWT', error]);
+      res.sendStatus(500);
+    }
+    res.end();
   }
-
-  //Call the next middleware or controller
-  next();
 };
 
 export = checkJwt;

@@ -1,25 +1,28 @@
 'use strict';
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('attachments', {
+    await queryInterface.createTable('users', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      attach_type: {
+      email: {
         type: Sequelize.STRING
       },
-      key: {
+      first_name: {
         type: Sequelize.STRING
       },
-      candidature_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'candidatures',
-          key: 'id',
-        }
+      last_name: {
+        type: Sequelize.STRING
+      },
+      password: {
+        type: Sequelize.STRING
+      },
+      role: {
+        type: Sequelize.STRING
       },
       created_at: {
         allowNull: false,
@@ -30,14 +33,20 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-    return await queryInterface.addConstraint('attachments', ['attach_type'], {
+
+    await queryInterface.addConstraint('users', ['role'], {
       type: 'check',
       where: {
-        attach_type: ['cover_letter', 'cv', 'bac_marks', 'year_marks', 'degree', 'current_year_marks', 'notice_further_study']
+        role: ['eleve', 'administration', 'referant', 'entreprise']
       }
     });
+
+    return queryInterface.addConstraint('users', ['email'], {
+      type: 'unique'
+    });
   },
+
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('attachments');
+    return queryInterface.dropTable('users');
   }
 };

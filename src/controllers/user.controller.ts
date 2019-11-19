@@ -1,5 +1,26 @@
 import User from '../models/user';
 import { hashPassword } from '../helpers/password.helper';
+import Candidature from '../models/candidature';
+
+function getOwnProfile(id: number, role: string) {
+  switch (role) {
+    case 'eleve':
+      return User.findByPk(id, {
+        attributes: ['first_name', 'last_name', 'email'],
+        include: [
+          {
+            model: Candidature,
+            as: 'candidatures',
+            attributes: ['id', 'branch', 'status']
+          }]
+      });
+    case 'administration':
+      return User.findByPk(id, { attributes: ['first_name', 'last_name', 'email'] });
+    default:
+      return 'Vous n\'avez pas de profile';
+  }
+
+}
 
 function getUserByEmail(emailToCheck: string): Promise<User> {
   return User.findOne({
@@ -12,8 +33,8 @@ function getUserByEmail(emailToCheck: string): Promise<User> {
 async function addUser(user: User): Promise<User | undefined> {
   const userData = {
     email: user.email,
-    lname: user.lname,
-    fname: user.fname,
+    last_name: user.last_name,
+    first_name: user.first_name,
     password: hashPassword(user.password),
     role: user.role
   };
@@ -23,4 +44,4 @@ async function addUser(user: User): Promise<User | undefined> {
   }
 }
 
-export = { getUserByEmail, addUser };
+export = { getUserByEmail, addUser, getOwnProfile };

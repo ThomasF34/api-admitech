@@ -1,11 +1,12 @@
 import db from '../database/config/database';
-import { Model, DataTypes, HasManyGetAssociationsMixin } from 'sequelize';
+import { Model, DataTypes, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin } from 'sequelize';
 import PastYearExp from './pastyearexp';
 import Attachment from './attachment';
 
 class Candidature extends Model {
-  private id!: number;
+  public id!: number;
   public phone!: string;
+  public draft!: boolean;
   public first_name!: string;
   public last_name!: string;
   public nationnality!: string;
@@ -43,14 +44,18 @@ class Candidature extends Model {
   public other_apply_apprentise!: boolean;
   public candidate_comment!: string;
   public admin_comment!: string;
-  public status!: string;
+  public status!: number;
   public branch!: string;
   public certified!: boolean;
   public certified_at!: Date;
   public created_at!: Date;
   public updated_at!: Date;
 
-  public getExperiences!: HasManyGetAssociationsMixin<PastYearExp>;
+  public UserId!: number;
+
+  public createAttachment!: HasManyCreateAssociationMixin<Attachment>;
+  public createExperience!: HasManyCreateAssociationMixin<PastYearExp>;
+  public getAttachments!: HasManyGetAssociationsMixin<Attachment>;
 }
 
 Candidature.init({
@@ -60,6 +65,7 @@ Candidature.init({
     autoIncrement: true
   },
   phone: DataTypes.STRING,
+  draft: DataTypes.BOOLEAN,
   first_name: DataTypes.STRING,
   last_name: DataTypes.STRING,
   nationnality: DataTypes.STRING,
@@ -97,12 +103,10 @@ Candidature.init({
   other_apply_apprentise: DataTypes.BOOLEAN,
   candidate_comment: DataTypes.TEXT,
   admin_comment: DataTypes.TEXT,
-  status: DataTypes.STRING,
+  status: DataTypes.INTEGER,
   branch: DataTypes.STRING,
   certified: DataTypes.BOOLEAN,
   certified_at: DataTypes.DATE,
-  created_at: DataTypes.DATE,
-  updated_at: DataTypes.DATE
 }, {
   underscored: true,
   timestamps: true,

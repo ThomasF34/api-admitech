@@ -1,10 +1,44 @@
 'use strict';
+const bcrypt = require('bcryptjs');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    await queryInterface.bulkInsert('users', [{
+      id: 1,
+      first_name: 'Alice',
+      last_name: 'Dupond',
+      email: 'email@eleve.fr',
+      password: bcrypt.hashSync('abcd', 10),
+      role: 'eleve',
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      id: 2,
+      first_name: 'Bob',
+      last_name: 'Dupond',
+      email: 'email@administration.fr',
+      password: bcrypt.hashSync('abcd', 10),
+      role: 'administration',
+      created_at: new Date(),
+      updated_at: new Date()
+    }, {
+      id: 3,
+      first_name: 'Elisa',
+      last_name: 'Dupond',
+      email: 'email@entreprise.fr',
+      password: bcrypt.hashSync('abcd', 10),
+      role: 'entreprise',
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    ]);
+
     await queryInterface.bulkInsert('candidatures', [{
-      first_name: 'Thomas',
-      last_name: 'Falcone',
+      user_id: 1,
+      draft: true,
+      first_name: 'Alice',
+      last_name: 'Dupond',
       nationnality: 'Français',
       birth_date: new Date(),
       birth_place: 'montpellier',
@@ -40,7 +74,7 @@ module.exports = {
       other_apply_apprentise: null,
       candidate_comment: 'je suis content ',
       admin_comment: 'eleve a rejeter',
-      status: 'REFUSE',
+      status: 2,
       branch: 'do',
       certified: true,
       certified_at: new Date(),
@@ -65,15 +99,13 @@ module.exports = {
         rating: '4',
         ranking: '4/200',
         candidature_id: candidatureRow[0].id,
-        created_at: new Date(),
-        updated_at: new Date()
       }
     ], {});
 
     await queryInterface.bulkInsert('attachments', [
       {
         attach_type: 'cover_letter',
-        url: 'www.google.fr',
+        key: '1234.pdf',
         candidature_id: candidatureRow[0].id,
         created_at: new Date(),
         updated_at: new Date()
@@ -84,9 +116,11 @@ module.exports = {
   down: (queryInterface, Sequelize) => {
     Promise.all([
       queryInterface.bulkDelete('candidatures', [{
-        first_name: 'Thomas',
+        first_name: 'Alice',
       }]),
-      queryInterface.bulkDelete('past_year_exps', null)
+      queryInterface.bulkDelete('past_year_exps', null),
+      queryInterface.bulkDelete('attachments', null),
+      queryInterface.bulkDelete('users', [{ first_name: 'Alice' }, { first_name: 'Bob' }, { first_name: 'Elisa' }]),
     ]);
   }
 };

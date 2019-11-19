@@ -3,6 +3,16 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
+      // Refers to a user
+      queryInterface.addColumn('candidatures', 'user_id', {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id',
+        }
+      }),
+
       // Personnel
       queryInterface.addColumn('candidatures', 'first_name', {
         type: Sequelize.STRING
@@ -126,7 +136,7 @@ module.exports = {
         type: Sequelize.TEXT
       }),
       queryInterface.addColumn('candidatures', 'status', {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       }),
       queryInterface.addColumn('candidatures', 'branch', {
         type: Sequelize.STRING
@@ -169,13 +179,15 @@ module.exports = {
           branch: ['do', 'se']
         }
       }),
-      /* MUST BE DISCUSSED BEFORE IMPLEMENTED (TODO)
+
       queryInterface.addConstraint('candidatures', ['status'], {
         type: 'check',
         where: {
-          status: ['']
+          status: {
+            [Sequelize.Op.between]: [1, 11]
+          }
         }
-      }),*/
+      }),
 
       queryInterface.removeColumn('candidatures', 'fname'),
       queryInterface.removeColumn('candidatures', 'lname'),

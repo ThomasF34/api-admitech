@@ -1,17 +1,21 @@
 import db from '../database/config/database';
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin } from 'sequelize';
+import Candidature from './candidature';
 
 class User extends Model {
-  private idUser!: number;
+  public id!: number;
   public email!: string;
-  public fname!: string;
-  public lname!: string;
+  public first_name!: string;
+  public last_name!: string;
   public password!: string;
   public role!: string;
+
+  public createCandidature!: HasManyCreateAssociationMixin<Candidature>;
+  public getCandidatures!: HasManyGetAssociationsMixin<Candidature>;
 }
 
 User.init({
-  idUser: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
@@ -19,13 +23,14 @@ User.init({
   email: DataTypes.STRING,
   password: DataTypes.STRING,
   role: DataTypes.STRING,
-  lname: DataTypes.STRING,
-  fname: DataTypes.STRING
+  last_name: DataTypes.STRING,
+  first_name: DataTypes.STRING
 }, {
-  tableName: 'User',
-  timestamps: false,
-  freezeTableName: true,
+  underscored: true,
+  timestamps: true,
   sequelize: db
 });
+
+User.hasMany(Candidature, { as: 'candidatures' });
 
 export = User;
