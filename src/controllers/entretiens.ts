@@ -9,6 +9,14 @@ function entretienByCandidature(idCanditature: number): Promise<Entretien> {
   });
 }
 
+function getAllEntretiensAvailable(): Promise<Entretien[]> {
+  return Entretien.findAll({
+    where: {
+      candidature_id: 0
+    }
+  });
+}
+
 function getEntretienById(idEntretien: number): Promise<Entretien> {
   return Entretien.findOne({
     where: {
@@ -29,4 +37,4 @@ function assignCandidatureToEntretien(idEntretien: number,idCanditature: number)
 }
 
 
-export = { entretienByCandidature, getEntretienById, assignCandidatureToEntretien }
+export = { entretienByCandidature, getEntretienById, assignCandidatureToEntretien , getAllEntretiensAvailable}

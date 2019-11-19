@@ -16,6 +16,18 @@ entretienRouter.get('/:candidatureId', [checkJwt], async (req: Request, res: Res
     }
 });
 
+entretienRouter.get('/available', [checkJwt], async (req: Request, res: Response) => {
+    try {
+    
+        const entretiens: Entretien[] = await entretienController.getAllEntretiensAvailable();
+        entretiens.length === 0 ?
+            res.sendStatus(204) :
+            res.status(200).json(entretiens);
+    } catch (e) {
+        res.status(500).json(e.message);
+    }
+});
+
 entretienRouter.put('/', [checkJwt], async (req: Request, res: Response) => {
 
     const entretien: Entretien = await entretienController.getEntretienById(req.body.id);
