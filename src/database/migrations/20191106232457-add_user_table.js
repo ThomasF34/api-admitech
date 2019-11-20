@@ -4,7 +4,6 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('users', {
       id: {
-        allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
@@ -37,7 +36,7 @@ module.exports = {
     await queryInterface.addConstraint('users', ['role'], {
       type: 'check',
       where: {
-        role: ['eleve', 'administration', 'referant', 'entreprise']
+        role: ['eleve', 'administration', 'professeur', 'referant', 'entreprise']
       }
     });
 

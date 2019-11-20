@@ -17,12 +17,12 @@ function getOwnProfile(id: number, role: string) {
     case 'administration':
       return User.findByPk(id, { attributes: ['first_name', 'last_name', 'email'] });
     default:
-      return 'Vous n\'avez pas de profile';
+      return 'Vous n\'avez pas de profil';
   }
 
 }
 
-function getUserByEmail(emailToCheck: string): Promise<User> {
+function getUserByEmail(emailToCheck: string): Promise<User | null> {
   return User.findOne({
     where: {
       email: emailToCheck
@@ -35,7 +35,7 @@ async function addUser(user: User): Promise<User | undefined> {
     email: user.email,
     last_name: user.last_name,
     first_name: user.first_name,
-    password: hashPassword(user.password),
+    password: user.password === undefined ? null : hashPassword(user.password),
     role: user.role
   };
   const userExisting = await getUserByEmail(user.email);
