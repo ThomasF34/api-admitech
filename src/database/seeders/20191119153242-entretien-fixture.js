@@ -36,7 +36,6 @@ module.exports = {
     ]);
   },
 
-
   down: (queryInterface, Sequelize) => {
     Promise.all([
       queryInterface.bulkDelete('entretiens', [{

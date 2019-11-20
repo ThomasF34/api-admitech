@@ -6,6 +6,7 @@ import juryController from '../controllers/jurys';
 import logger = require('../helpers/logger');
 import User = require('../models/user');
 import Jury = require('../models/jury');
+import { makeSlots } from '../helpers/slots.helper';
 const entretienRouter = Router();
 
 entretienRouter.get('/formation/:nomFormation/disponible', [checkJwt], async (req: Request, res: Response) => {
@@ -35,6 +36,10 @@ entretienRouter.get('/etudiant/:candidatureId', [checkJwt], async (req: Request,
 });
 
 entretienRouter.post('/', [checkJwt], async (req: Request, res: Response) => {
+  interface Slot {
+    beginning: Date,
+    end: Date
+  }
 
   try {
     const userId = res.locals.user.id;
@@ -48,37 +53,39 @@ entretienRouter.post('/', [checkJwt], async (req: Request, res: Response) => {
     } else {
       //role guards
       if (!['administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration peut créer des crénaux d\'entretiens');
+      const slots: Slot[] = makeSlots(new Date(req.body.begining_hour), new Date(req.body.ending_hour), req.body.duration);
 
-      const entretienToInsert = new Entretien(
-        {
-          begining_hour: req.body.begining_hour,
-          ending_hour: req.body.ending_hour,
-          formation: req.body.formation,
-          created_at: req.body.created_at,
-          updated_at: req.body.updated_at,
-        }
-      );
-
-      const createResponse = await entretienController.addEntretien(entretienToInsert);
-      if (createResponse instanceof Entretien) {
-        res.sendStatus(200);
-      } else {
-        res
-          .status(400)
-          .json({ errors: createResponse });
-      }
+      slots.forEach(async slot => {
+        const { beginning, end } = JSON.parse(JSON.stringify(slot));
+        const entretienToInsert = new Entretien();
+        entretienToInsert.begining_hour = <Date>beginning,
+        entretienToInsert.ending_hour = <Date>end,
+        entretienToInsert.formation = <string>req.body.formation,
+        entretienToInsert.created_at = new Date(),
+        entretienToInsert.updated_at = new Date(),
+        await entretienController.addEntretien(entretienToInsert);
+      });
+      res.sendStatus(200);
     }
   } catch (err) {
     res.status(500).send(err.message);
   }
 });
 
+/*
+entretienRouter.get('/affecter', async (req: Request, res: Response) => {
+  try {
+    makeSlots(new Date(2019, 10, 10, 0, 0, 0, 0), new Date(2019, 10, 12, 0, 0, 0, 0), 1);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+*/
 
 entretienRouter.put('/etudiant/affecter', [checkJwt], async (req: Request, res: Response) => {
 
   const entretien: Entretien = await entretienController.getEntretienById(req.body.entretien_id);
   const candId = parseInt(req.body.candidature_id);
-
   try {
     const updateResponse = await entretienController.assignCandidatureToEntretien(entretien.id, candId);
     if (updateResponse instanceof Entretien) {
@@ -106,12 +113,12 @@ entretienRouter.put('/jury/affecter', [checkJwt], async (req: Request, res: Resp
     } else {
       //role guards
       if (!['administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration peut créer des crénaux d\'entretiens');
-      const jurysId: number[] = req.body.jurys_id
-      console.log(jurysId)
+      const jurysId: number[] = req.body.jurys_id;
+      console.log(jurysId);
       let inserted: number[] = [];
       let resInsert;
       jurysId.forEach(async (element) => {
-        console.log(element)
+        console.log(element);
         resInsert = await juryController.assignJuryToEntretien(req.body.entretien_id, element);
         if (resInsert instanceof Jury) {
           inserted.push(0);

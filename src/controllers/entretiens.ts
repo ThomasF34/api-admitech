@@ -54,7 +54,7 @@ async function addEntretien(ele: Entretien): Promise<Entretien> {
   catch (err) {
     logger.error(['Error while creating an application', err]);
     throw err;
-  };
+  }
 }
 
 function updateEntretien(ele: Entretien,id: string): Promise<[number, Entretien[]]> {
