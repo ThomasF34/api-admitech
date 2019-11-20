@@ -149,11 +149,11 @@ function isValid(reqBody: any): [boolean, checkError[]] {
   }
 }
 
-const hasProperty = (obj: any, field: string) => Object.prototype.hasOwnProperty.call(obj, field);
+const hasProperty = (obj: any, field: string) => Object.prototype.hasOwnProperty.call(obj, field) && obj[field] !== null;
 
 const verifyMandatoryFields = (obj: any, mandatories: string[], message: string): checkError[] => {
   return mandatories
-    .filter(field => !Object.prototype.hasOwnProperty.call(obj, field))
+    .filter(field => !hasProperty(obj, field))
     .map((missingField: string) => {
       return {
         id: missingField,
