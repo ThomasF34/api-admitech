@@ -36,6 +36,6 @@ Entretien.init({
   sequelize: db
 });
 
-Entretien.hasOne(Candidature, { as: 'candidature', foreignKey: 'candidature_id'});
+Entretien.hasOne(Candidature, { as: 'candidature', foreignKey: 'candidature_id' });
 
 export = Entretien;

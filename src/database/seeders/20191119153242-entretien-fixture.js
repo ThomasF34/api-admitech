@@ -27,7 +27,7 @@ module.exports = {
       created_at: new Date(),
       updated_at: new Date()
     }
-    ,
+      ,
     {
       date: new Date(),
       begining_hour: '14h45',
