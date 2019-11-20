@@ -106,6 +106,10 @@ async function updateCandidature(cand: Candidature, params: any): Promise<Candid
   }
 }
 
+async function updateStatus(cand: Candidature, newStatus: number): Promise<Candidature> {
+  return await cand.update({ status: newStatus });
+}
+
 interface checkError {
   id: string,
   error: string
@@ -158,4 +162,4 @@ const verifyMandatoryFields = (obj: any, mandatories: string[], message: string)
     });
 };
 
-export = { getAll, getById, createCandidature, updateCandidature }
+export = { getAll, getById, createCandidature, updateCandidature, updateStatus }

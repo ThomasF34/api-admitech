@@ -34,16 +34,15 @@ candidatureRouter.get('/:id', [checkJwt], async (req: Request, res: Response) =>
   const userId: number = res.locals.user.id;
   try {
     if (role !== 'administration' && role !== 'eleve') {
-      res
+      return res
         .status(403)
         .send('Vous n\'avez pas accès à la ressource demandée');
-    } else {
-      const id: number = parseInt(req.params.id);
-      const candidature: Candidature = await candidatureController.getById(id, role);
-      if (candidature === null) res.status(404).json(`La candidature ${id} n'a pas été trouvée`);
-      else if (candidature.UserId !== userId) res.status(403).json('Les élèves ne peuvent accéder qu\'à leurs propres candidatures');
-      else res.status(200).json(candidature);
     }
+    const id: number = parseInt(req.params.id);
+    const candidature: Candidature = await candidatureController.getById(id, role);
+    if (candidature === null) res.status(404).json(`La candidature ${id} n'a pas été trouvée`);
+    else if (role === 'eleve' && candidature.UserId !== userId) res.status(403).json('Les élèves ne peuvent accéder qu\'à leurs propres candidatures');
+    else res.status(200).json(candidature);
   } catch (e) {
     res
       .status(500)
@@ -149,6 +148,34 @@ candidatureRouter.delete('/:candId/document/:attachId', [checkJwt], async (req: 
         res.status(500).json('Erreur serveur lors de la suppression de la pièce jointe');
       });
   }
+});
+
+candidatureRouter.put('/:candId/status', [checkJwt], async (req: Request, res: Response) => {
+  const userId = res.locals.user.id;
+  const user = await User.findByPk(userId);
+  const newStatus = parseInt(req.body.status);
+  const candId = req.params.candId;
+  if (user === undefined) {
+    logger.error(`User ${userId} not found while trying to delete an attachment`);
+    return res
+      .status(404)
+      .send('Utilisateur non trouvé');
+  }
+  //role guards
+  const cand = await candidatureController.getById(parseInt(candId), user!.role);
+  if (cand === null) return res.status(404).json(`La candidature ${candId} n'a pas été trouvée`);
+  if (user!.role !== 'administration') return res.status(403).send('Seule l\'administration peut modifier le status d\'une candidature');
+  if (newStatus > 11 || newStatus < 1) return res.status(400).send('Veuillez entrer un status correct');
+  //TODO Coherence between actual cand state and future status
+  //end of guards
+
+
+  return candidatureController.updateStatus(cand, newStatus)
+    .then(() => res.status(200).json('Candidature mise à jour'))
+    .catch(err => {
+      logger.error(['error while deleting an attachment', err]);
+      res.status(500).json('Erreur serveur lors de la modification du status');
+    });
 });
 
 export = candidatureRouter;
