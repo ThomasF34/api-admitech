@@ -100,7 +100,7 @@ candidatureRouter.put('/:id', [checkJwt], async (req: Request, res: Response) =>
       if (![1, 3].includes(cand.status)) return res.status(403).json('Vous ne pouvez pas mettre à jour votre candidature si celle si est déjà transmise');
       delete params.status; //student can see status but cannot update it
     }
-    if (cand.status === 1 && !(<boolean>params.draft)) params.status = 'transmis';
+    if (cand.status === 1 && !(<boolean>params.draft)) params.status = 2;
     //end of guards
 
     try {
