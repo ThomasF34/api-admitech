@@ -72,6 +72,34 @@ entretienRouter.post('/', [checkJwt], async (req: Request, res: Response) => {
   }
 });
 
+
+
+entretienRouter.delete('/supprimer/:entretien_id', [checkJwt], async (req: Request, res: Response) => {
+  try {
+    const userId = res.locals.user.id;
+    const user = await User.findByPk(userId);
+
+    if (user === undefined) {
+      logger.error(`User ${userId} not found while trying to create an application`);
+      res
+        .status(404)
+        .send('Utilisateur non trouvé');
+    } else {
+      //role guards
+      if (!['administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration peut créer des crénaux d\'entretiens');
+      const elem = await entretienController.deleteEntretien(req.params.entretien_id);
+      if (elem === 1) {
+        res.sendStatus(200);
+      } else {
+        res.sendStatus(404);
+      }
+    }
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+
 /*
 entretienRouter.get('/affecter', async (req: Request, res: Response) => {
   try {
@@ -114,11 +142,9 @@ entretienRouter.put('/jury/affecter', [checkJwt], async (req: Request, res: Resp
       //role guards
       if (!['administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration peut créer des crénaux d\'entretiens');
       const jurysId: number[] = req.body.jurys_id;
-      console.log(jurysId);
       let inserted: number[] = [];
       let resInsert;
       jurysId.forEach(async (element) => {
-        console.log(element);
         resInsert = await juryController.assignJuryToEntretien(req.body.entretien_id, element);
         if (resInsert instanceof Jury) {
           inserted.push(0);
