@@ -2,7 +2,23 @@ import { Request, Response, Router } from 'express';
 import checkJwt = require('../middlewares/auth.middleware');
 import Entretien = require('../models/entretien');
 import entretienController from '../controllers/entretiens';
+import logger = require('../helpers/logger');
 const entretienRouter = Router();
+
+entretienRouter.get('/available', [checkJwt], async (req: Request, res: Response) => {
+  try {
+    logger.info('ntm');
+    const entretiens: Entretien[] = await entretienController.getAllEntretiensAvailable();
+    logger.info('ntm1');
+
+    entretiens.length === 0 ?
+      res.sendStatus(204) :
+      res.status(200).json(entretiens);
+  } catch (e) {
+    logger.error(e);
+    res.status(500).json(e.message);
+  }
+});
 
 entretienRouter.get('/:candidatureId', [checkJwt], async (req: Request, res: Response) => {
   try {
@@ -16,17 +32,6 @@ entretienRouter.get('/:candidatureId', [checkJwt], async (req: Request, res: Res
   }
 });
 
-entretienRouter.get('/available', [checkJwt], async (req: Request, res: Response) => {
-  try {
-
-    const entretiens: Entretien[] = await entretienController.getAllEntretiensAvailable();
-    entretiens.length === 0 ?
-      res.sendStatus(204) :
-      res.status(200).json(entretiens);
-  } catch (e) {
-    res.status(500).json(e.message);
-  }
-});
 
 entretienRouter.put('/', [checkJwt], async (req: Request, res: Response) => {
 

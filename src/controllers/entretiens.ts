@@ -1,5 +1,7 @@
-
 import Entretien from '../models/entretien';
+import {Op} from 'sequelize';
+import Candidature from '../models/candidature';
+
 
 function entretienByCandidature(idCanditature: number): Promise<Entretien> {
   return Entretien.findOne({
@@ -12,7 +14,7 @@ function entretienByCandidature(idCanditature: number): Promise<Entretien> {
 function getAllEntretiensAvailable(): Promise<Entretien[]> {
   return Entretien.findAll({
     where: {
-      candidature_id: 0
+      'candidature_id': null 
     }
   });
 }

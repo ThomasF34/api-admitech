@@ -23,6 +23,8 @@ module.exports = {
       },
       candidature_id: {
         type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: null,
         references: {
           model: 'candidatures',
           key: 'id',

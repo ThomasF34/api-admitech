@@ -1,5 +1,6 @@
 import db from '../database/config/database';
 import { Model, DataTypes } from 'sequelize';
+import Candidature from './candidature';
 
 class Entretien extends Model {
   public id!: number;
@@ -34,5 +35,7 @@ Entretien.init({
   timestamps: true,
   sequelize: db
 });
+
+Entretien.hasOne(Candidature, { as: 'candidature', foreignKey: 'candidature_id'});
 
 export = Entretien;
