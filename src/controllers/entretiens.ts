@@ -37,6 +37,8 @@ function assignCandidatureToEntretien(idEntretien: number, idCanditature: number
   });
 }
 
+
+
 async function addEntretien(ele: Entretien): Promise<Entretien> {
   const elemToCreate = {
     begining_hour: ele.begining_hour,

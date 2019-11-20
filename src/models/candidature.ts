@@ -117,4 +117,4 @@ Candidature.init({
 Candidature.hasMany(PastYearExp, { as: 'experiences' });
 Candidature.hasMany(Attachment, { as: 'attachments' });
 
-export = Candidature
+export = Candidature;

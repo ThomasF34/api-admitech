@@ -270,3 +270,5 @@ Réponse :
   * 400 - Le paramètre `key` est obligatoire
   * 401 - L'utilisateur doit être connecté
   * 403 - Interdit
+
+- [x] POST - `/jury/affecter` - Affectation d'un jury (une personne) à un entretien
