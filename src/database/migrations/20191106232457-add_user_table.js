@@ -1,33 +1,26 @@
 'use strict';
+
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('candidatures', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('users', {
       id: {
-        allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      draft: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false
-      },
-      fname: {
-        type: Sequelize.STRING
-      },
-      lname: {
-        type: Sequelize.STRING
-      },
-      familySituation: {
-        type: Sequelize.STRING
-      },
-      birthdate: {
-        type: Sequelize.DATE
-      },
       email: {
         type: Sequelize.STRING
       },
-      phone: {
+      first_name: {
+        type: Sequelize.STRING
+      },
+      last_name: {
+        type: Sequelize.STRING
+      },
+      password: {
+        type: Sequelize.STRING
+      },
+      role: {
         type: Sequelize.STRING
       },
       created_at: {
@@ -39,8 +32,20 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
+
+    await queryInterface.addConstraint('users', ['role'], {
+      type: 'check',
+      where: {
+        role: ['eleve', 'administration', 'professeur', 'referant', 'entreprise']
+      }
+    });
+
+    return queryInterface.addConstraint('users', ['email'], {
+      type: 'unique'
+    });
   },
+
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('candidatures');
+    return queryInterface.dropTable('users');
   }
 };

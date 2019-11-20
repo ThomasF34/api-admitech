@@ -1,9 +1,0 @@
-{"message":"App is listening on port 3000!","level":"info","service":"api-admitech","timestamp":"2019-11-08 12:32:44"}
-{"message":"App is listening on port 3000!","level":"info","service":"api-admitech-undefined","timestamp":"2019-11-10 10:21:40"}
-{"message":"A request had been received on /","level":"info","service":"api-admitech-undefined","timestamp":"2019-11-10 10:21:57"}
-{"message":"A request had been received on /","level":"info","service":"api-admitech-undefined","timestamp":"2019-11-10 10:22:01"}
-{"message":"A request had been received on /","level":"info","service":"api-admitech-undefined","timestamp":"2019-11-10 10:22:54"}
-{"message":"A request had been received on /","level":"info","service":"api-admitech-undefined","timestamp":"2019-11-10 10:23:08"}
-{"message":"App is listening on port 3000!","level":"info","service":"api-admitech-undefined","timestamp":"2019-11-10 10:23:28"}
-{"message":"Asked for all ressources","level":"info","service":"api-admitech-undefined","timestamp":"2019-11-10 10:23:30"}
-{"message":"Asked for all ressources","level":"info","service":"api-admitech-undefined","timestamp":"2019-11-10 10:23:55"}

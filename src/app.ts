@@ -7,11 +7,8 @@ import logger from './helpers/logger';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import candidatureRouter from './routes/candidature';
-import evenementRouter from './routes/evenement';
-import qcmRouter from './routes/qcm';
-import entrepriseRouter from './routes/entreprise';
-import offreRouter from './routes/offre';
+import apiRouter from './routes/router'; //router
+
 
 const app = express();
 const port = 3000;
@@ -30,12 +27,8 @@ const dd_options = {
 
 app.use(connectDatadog(dd_options));
 
-// Primary routes
-app.use('/candidature', candidatureRouter);
-app.use('/evenement', evenementRouter);
-app.use('/qcm', qcmRouter);
-app.use('/entreprise', entrepriseRouter);
-app.use('/offre', offreRouter);
+// routes
+app.use(apiRouter);
 
 app.get('/', (req, res) => {
   logger.info('A request had been received on /');
