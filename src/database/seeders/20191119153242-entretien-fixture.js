@@ -11,27 +11,24 @@ module.exports = {
     const candidatureRow = candidatures[0];
 
     await queryInterface.bulkInsert('entretiens', [{
-      date: new Date(),
-      begining_hour: '13h',
-      ending_hour: '14h30',
+      begining_hour: new Date(),
+      ending_hour: new Date(),
       formation: 'se',
       candidature_id: candidatureRow[0].id,
       created_at: new Date(),
       updated_at: new Date()
     },
     {
-      date: new Date(),
-      begining_hour: '13h',
-      ending_hour: '14h30',
+      begining_hour: new Date(),
+      ending_hour: new Date(),
       formation: 'do',
       created_at: new Date(),
       updated_at: new Date()
     }
       ,
     {
-      date: new Date(),
-      begining_hour: '14h45',
-      ending_hour: '15h30',
+      begining_hour: new Date(),
+      ending_hour: new Date(),
       formation: 'do',
       created_at: new Date(),
       updated_at: new Date()

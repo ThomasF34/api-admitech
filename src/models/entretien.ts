@@ -4,9 +4,8 @@ import Candidature from './candidature';
 
 class Entretien extends Model {
   public id!: number;
-  public date!: Date;
-  public begining_hour!: string;
-  public ending_hour!: string;
+  public begining_hour!: Date;
+  public ending_hour!: Date;
   public formation!: string;
   public created_at!: Date;
   public updated_at!: Date;
@@ -17,9 +16,6 @@ Entretien.init({
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
-  },
-  date: {
-    type: DataTypes.DATE
   },
   begining_hour: {
     type: DataTypes.STRING

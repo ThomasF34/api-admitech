@@ -257,3 +257,16 @@ Réponse :
             "id": "other_apply_place"
         }
 ```
+
+## Entretiens
+
+- [x] GET - `/entretien/etudiant/:candId` - Récupère l'entretien de la candidature associée
+
+- [x] POST - `/entretien` - Création d'un entretien
+- [x] POST - `/entretien/etudiant/affecter` - Création d'un entretien
+
+- [x] GET - `/entretien/formation/:nomFormation/disponible` - Récupère
+  * 200 - URL renvoyée
+  * 400 - Le paramètre `key` est obligatoire
+  * 401 - L'utilisateur doit être connecté
+  * 403 - Interdit
