@@ -78,7 +78,7 @@ function deleteEntretien(idE: string): Promise<number> {
   });
 }
   
-}
+
 
 
 export = { entretienByCandidature, getEntretienById, assignCandidatureToEntretien, getAllEntretiensAvailableForFormation, addEntretien, updateEntretien, deleteEntretien }

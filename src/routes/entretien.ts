@@ -6,7 +6,7 @@ import logger = require('../helpers/logger');
 import User = require('../models/user');
 const entretienRouter = Router();
 
-entretienRouter.get('/entretien/formation/:nomFormation/disponible', [checkJwt], async (req: Request, res: Response) => {
+entretienRouter.get('/formation/:nomFormation/disponible', [checkJwt], async (req: Request, res: Response) => {
   try {
 
     const entretiens: Entretien[] = await entretienController.getAllEntretiensAvailableForFormation(req.params.nomFormation);
