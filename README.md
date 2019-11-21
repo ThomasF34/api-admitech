@@ -265,10 +265,10 @@ Réponse :
 - [x] POST - `/entretien` - Création d'un entretien
 - [x] POST - `/entretien/etudiant/affecter` - Création d'un entretien
 
-- [x] GET - `/entretien/formation/:nomFormation/disponible` - Récupère
-  * 200 - URL renvoyée
-  * 400 - Le paramètre `key` est obligatoire
-  * 401 - L'utilisateur doit être connecté
-  * 403 - Interdit
+- [x] GET - `/entretien/formation/:nomFormation/disponible` - Récupère les crénaux  d'entretiens disponibles pour une formation
 
-- [x] POST - `/jury/affecter` - Affectation d'un jury (une personne) à un entretien
+- [x] GET - `/entretien/formation/:nomFormation` - Récupère les crénaux  d'entretiens pour une formation
+
+- [x] PUT - `/jury/affecter` - Affectation d'un jury (une personne) à un entretien
+- [x] PUT - `/jury/noter` - Noter et commenter un entretien
+- [x] DELETE - `/entretien/supprimer/:entretien_id`- Suppression d'un entretien
