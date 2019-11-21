@@ -23,6 +23,19 @@ entretienRouter.get('/formation/:nomFormation/disponible', [checkJwt], async (re
     res.status(500).json(e.message);
   }
 });
+entretienRouter.get('/formation/:nomFormation', [checkJwt], async (req: Request, res: Response) => {
+  try {
+
+    const entretiens: Entretien[] = await entretienController.getAllEntretiensForFormation(req.params.nomFormation);
+
+    entretiens.length === 0 ?
+      res.sendStatus(204) :
+      res.status(200).json(entretiens);
+  } catch (e) {
+    logger.error(e);
+    res.status(500).json(e.message);
+  }
+});
 
 entretienRouter.get('/etudiant/:candidatureId', [checkJwt], async (req: Request, res: Response) => {
   try {

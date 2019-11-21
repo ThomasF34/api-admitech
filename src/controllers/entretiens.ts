@@ -19,6 +19,13 @@ function getAllEntretiensAvailableForFormation(formation: string): Promise<Entre
   });
 }
 
+function getAllEntretiensForFormation(formation: string): Promise<Entretien[]> {
+  return Entretien.findAll({
+    where: {
+      formation: formation
+    }
+  });
+}
 function getEntretienById(idEntretien: number): Promise<Entretien> {
   return Entretien.findOne({
     attributes: ['id', 'begining_hour', 'ending_hour', 'formation', 'candidature_id','created_at', 'updated_at'],
@@ -79,4 +86,4 @@ function deleteEntretien(idE: string): Promise<number> {
 
 
 
-export = { entretienByCandidature, getEntretienById, assignCandidatureToEntretien, getAllEntretiensAvailableForFormation, addEntretien, updateEntretien, deleteEntretien }
+export = { entretienByCandidature,getAllEntretiensForFormation, getEntretienById, assignCandidatureToEntretien, getAllEntretiensAvailableForFormation, addEntretien, updateEntretien, deleteEntretien }
