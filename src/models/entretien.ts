@@ -1,5 +1,5 @@
 import db from '../database/config/database';
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, HasOneSetAssociationMixin } from 'sequelize';
 import Candidature from './candidature';
 
 class Entretien extends Model {
@@ -9,6 +9,8 @@ class Entretien extends Model {
   public formation!: string;
   public created_at!: Date;
   public updated_at!: Date;
+  public candidature_id! : number;
+ 
 }
 
 Entretien.init({
@@ -32,6 +34,6 @@ Entretien.init({
   sequelize: db
 });
 
-Entretien.hasOne(Candidature, { as: 'candidature', foreignKey: 'candidature_id' });
+
 
 export = Entretien;

@@ -1,5 +1,6 @@
 import Entretien from '../models/entretien';
 import logger from '../helpers/logger';
+import Candidature from '../models/candidature';
 
 function entretienByCandidature(idCanditature: number): Promise<Entretien> {
   return Entretien.findOne({
@@ -20,21 +21,16 @@ function getAllEntretiensAvailableForFormation(formation: string): Promise<Entre
 
 function getEntretienById(idEntretien: number): Promise<Entretien> {
   return Entretien.findOne({
+    attributes: ['id', 'begining_hour', 'ending_hour', 'formation', 'candidature_id','created_at', 'updated_at'],
     where: {
       id: idEntretien
     }
   });
 }
 
-function assignCandidatureToEntretien(idEntretien: number, idCanditature: number): Promise<[number, Entretien[]]> {
-  const elemToUpdate = {
-    candidature_id: idCanditature
-  };
-  return Entretien.update(elemToUpdate, {
-    where: {
-      id: idEntretien
-    }
-  });
+function assignCandidatureToEntretien(entretien: Entretien, candidature: Candidature) {
+
+  return candidature.setEntretien(entretien);
 }
 
 

@@ -2,11 +2,14 @@ import { Request, Response, Router } from 'express';
 import checkJwt = require('../middlewares/auth.middleware');
 import Entretien = require('../models/entretien');
 import entretienController from '../controllers/entretiens';
+import candidatureController from '../controllers/candidatures';
 import juryController from '../controllers/jurys';
 import logger = require('../helpers/logger');
 import User = require('../models/user');
 import Jury = require('../models/jury');
 import { makeSlots } from '../helpers/slots.helper';
+import Candidature = require('../models/candidature');
+import candidatures = require('../controllers/candidatures');
 const entretienRouter = Router();
 
 entretienRouter.get('/formation/:nomFormation/disponible', [checkJwt], async (req: Request, res: Response) => {
@@ -113,16 +116,30 @@ entretienRouter.get('/affecter', async (req: Request, res: Response) => {
 entretienRouter.put('/etudiant/affecter', [checkJwt], async (req: Request, res: Response) => {
 
   const entretien: Entretien = await entretienController.getEntretienById(req.body.entretien_id);
-  const candId = parseInt(req.body.candidature_id);
+  console.log('CandId in entretien : '+entretien.candidature_id);
+
+  if(entretien.candidature_id !== null){
+   return res.status(400).send('Cet entretien est déjà affecté');
+  }
+
+  
+
+  const candidature = await Candidature.findByPk(req.body.candidature_id);
+  if(candidature === null){
+    res.sendStatus(404);
+  }
+  const alreadyExists = await candidature!.getEntretien();
+  console.log(typeof alreadyExists);
+  console.log(alreadyExists)
+  if(alreadyExists instanceof Entretien){
+    return res.status(400).send('Cette candidature a déjà un entretien');
+  }
   try {
-    const updateResponse = await entretienController.assignCandidatureToEntretien(entretien.id, candId);
-    if (updateResponse instanceof Entretien) {
+    const updateResponse = await entretienController.assignCandidatureToEntretien(entretien, candidature!);
+    console.log(updateResponse);
+    
       res.sendStatus(200);
-    } else {
-      res
-        .status(400)
-        .json({ errors: updateResponse });
-    }
+    
   } catch (err) {
     res.status(500).send(err.message);
   }
