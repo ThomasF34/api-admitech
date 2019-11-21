@@ -21,10 +21,10 @@ module.exports = {
         }
       },
       note: {
-        type: DataTypes.DECIMAL
+        type: Sequelize.DECIMAL
       },
       comment: {
-        type: DataTypes.STRING
+        type: Sequelize.STRING
       },
       created_at: {
         allowNull: false,
