@@ -16,6 +16,8 @@ module.exports = {
       {
         user_id: userRow[0].id,
         entretien_id: entretienRow[0].id,
+        note: 12,
+        comment: 'Bien dans l\'ensemble',
         created_at: new Date(),
         updated_at: new Date()
       }

@@ -8,4 +8,18 @@ function assignJuryToEntretien(idEntretien: number, idUser: number): Promise<Jur
   return Jury.create(elemToUpdate);
 }
 
-export = { assignJuryToEntretien };
+function setNoteAndComment(note: number, comment: number, idEntretien: number, idUser: number): Promise<[number, Jury[]]> {
+  const elemToUpdate = {
+   note: note,
+   comment: comment
+
+  };
+  return Jury.update(elemToUpdate, {
+    where: {
+      user_id: idUser,
+    entretien_id: idEntretien
+    }
+  });
+}
+
+export = { assignJuryToEntretien, setNoteAndComment };

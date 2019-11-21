@@ -190,5 +190,33 @@ entretienRouter.put('/jury/affecter', [checkJwt], async (req: Request, res: Resp
   }
 });
 
+entretienRouter.put('/jury/noter', [checkJwt], async (req: Request, res: Response) => {
+  try {
+    const userId = res.locals.user.id;
+    const user = await User.findByPk(userId);
+
+    if (user === undefined) {
+      logger.error(`User ${userId} not found while trying to create an application`);
+      res
+        .status(404)
+        .send('Utilisateur non trouvé');
+    } else {
+      //role guards
+      if (!['administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration peut créer des crénaux d\'entretiens');
+     
+      const updateResponse = await juryController.setNoteAndComment(req.body.note,req.body.comment,req.body.entretien_id,req.body.user_id);
+
+      if (updateResponse[0] === 1) {
+        res.sendStatus(200);
+      } else {
+        res
+          .status(400)
+          .json({ errors: updateResponse });
+      }
+    }
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
 
 export = entretienRouter;

@@ -6,6 +6,8 @@ import Entretien from './entretien';
 class jury extends Model {
   public entretien_id!: number;
   public user_id!: number;
+  public note!: number;
+  public comment!: string;
   public created_at!: Date;
   public updated_at!: Date;
 }
@@ -18,6 +20,12 @@ jury.init({
     type: DataTypes.INTEGER,
     primaryKey: true
   },
+  note: {
+    type: DataTypes.DECIMAL
+  },
+  comment: {
+    type: DataTypes.STRING
+  }
 }, {
   underscored: true,
   freezeTableName: true,

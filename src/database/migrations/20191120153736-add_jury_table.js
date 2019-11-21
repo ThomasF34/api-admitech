@@ -20,6 +20,12 @@ module.exports = {
           key: 'id',
         }
       },
+      note: {
+        type: DataTypes.DECIMAL
+      },
+      comment: {
+        type: DataTypes.STRING
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
