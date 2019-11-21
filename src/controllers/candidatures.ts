@@ -5,6 +5,7 @@ import User from '../models/user';
 import logger from '../helpers/logger';
 import experiencesController from './experiences';
 import { Op } from 'sequelize';
+import mailController from './mail';
 
 async function getAll(): Promise<Candidature[]> {
   return Candidature.findAll({
@@ -107,6 +108,7 @@ async function updateCandidature(cand: Candidature, params: any): Promise<Candid
 }
 
 async function updateStatus(cand: Candidature, newStatus: number): Promise<Candidature> {
+  mailController.sendEmailIfNeeded(cand, newStatus);
   return await cand.update({ status: newStatus });
 }
 
