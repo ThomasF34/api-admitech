@@ -1,6 +1,5 @@
 import db from '../database/config/database';
-import { Model, DataTypes, HasOneSetAssociationMixin } from 'sequelize';
-import Candidature from './candidature';
+import { Model, DataTypes } from 'sequelize';
 
 class Entretien extends Model {
   public id!: number;
