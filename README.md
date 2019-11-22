@@ -269,6 +269,7 @@ Réponse :
 
 - [x] GET - `/entretien/formation/:nomFormation` - Récupère les crénaux  d'entretiens pour une formation
 
-- [x] PUT - `/jury/affecter` - Affectation d'un jury (une personne) à un entretien
+- [x] POST - `/jury/affecter` - Affectation d'un jury (une personne) à un entretien
+- [x] GET - `/jury` - Récupère tous les jurys
 - [x] PUT - `/jury/noter` - Noter et commenter un entretien
 - [x] DELETE - `/entretien/supprimer/:entretien_id`- Suppression d'un entretien

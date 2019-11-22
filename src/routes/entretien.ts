@@ -155,7 +155,7 @@ entretienRouter.put('/etudiant/affecter', [checkJwt], async (req: Request, res: 
   }
 });
 
-entretienRouter.put('/jury/affecter', [checkJwt], async (req: Request, res: Response) => {
+entretienRouter.post('/jury/affecter', [checkJwt], async (req: Request, res: Response) => {
   try {
     const userId = res.locals.user.id;
     const user = await User.findByPk(userId);
