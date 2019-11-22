@@ -30,6 +30,15 @@ function getUserByEmail(emailToCheck: string): Promise<User> {
   });
 }
 
+function getAllJuries(): Promise<User[]> {
+  return User.findAll({
+    where: {
+      role: "administration"
+    }
+  });
+}
+
+
 async function addUser(user: User): Promise<User | undefined> {
   const userData = {
     email: user.email,
@@ -44,4 +53,4 @@ async function addUser(user: User): Promise<User | undefined> {
   }
 }
 
-export = { getUserByEmail, addUser, getOwnProfile };
+export = { getUserByEmail, addUser, getOwnProfile,getAllJuries };

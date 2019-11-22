@@ -8,6 +8,7 @@ import User = require('../models/user');
 import Jury = require('../models/jury');
 import { makeSlots } from '../helpers/slots.helper';
 import Candidature = require('../models/candidature');
+import userController = require('../controllers/user.controller');
 const entretienRouter = Router();
 
 entretienRouter.get('/formation/:nomFormation/disponible', [checkJwt], async (req: Request, res: Response) => {
@@ -189,6 +190,30 @@ entretienRouter.put('/jury/affecter', [checkJwt], async (req: Request, res: Resp
     res.status(500).send(err.message);
   }
 });
+
+
+entretienRouter.get('/jury', [checkJwt], async (req: Request, res: Response) => {
+  try {
+    const userId = res.locals.user.id;
+    const user = await User.findByPk(userId);
+
+    if (user === undefined) {
+      logger.error(`User ${userId} not found while trying to create an application`);
+      res
+        .status(404)
+        .send('Utilisateur non trouvé');
+    } else {
+      //role guards
+      if (!['administration'].includes(user!.role)) return res.status(403).send('Seule l\'administration peut créer des crénaux d\'entretiens');
+      
+      const juries = await userController.getAllJuries();
+      res.status(200).send(juries);
+    }
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
 
 entretienRouter.put('/jury/noter', [checkJwt], async (req: Request, res: Response) => {
   try {
