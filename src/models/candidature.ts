@@ -1,7 +1,8 @@
 import db from '../database/config/database';
-import { Model, DataTypes, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin } from 'sequelize';
+import { Model, DataTypes, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasOneSetAssociationMixin, HasOneGetAssociationMixin } from 'sequelize';
 import PastYearExp from './pastyearexp';
 import Attachment from './attachment';
+import Entretien from './entretien';
 
 class Candidature extends Model {
   public id!: number;
@@ -56,6 +57,8 @@ class Candidature extends Model {
   public createAttachment!: HasManyCreateAssociationMixin<Attachment>;
   public createExperience!: HasManyCreateAssociationMixin<PastYearExp>;
   public getAttachments!: HasManyGetAssociationsMixin<Attachment>;
+  public setEntretien!: HasOneSetAssociationMixin<Entretien, number>;
+  public getEntretien!: HasOneGetAssociationMixin<Entretien>;
 }
 
 Candidature.init({
@@ -115,5 +118,6 @@ Candidature.init({
 
 Candidature.hasMany(PastYearExp, { as: 'experiences' });
 Candidature.hasMany(Attachment, { as: 'attachments' });
+Candidature.hasOne(Entretien, { as: 'entretien', foreignKey: 'candidature_id' });
 
-export = Candidature
+export = Candidature;

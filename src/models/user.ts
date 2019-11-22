@@ -10,8 +10,11 @@ class User extends Model {
   public password!: string;
   public role!: string;
 
+  public candidatures!: Candidature[];
+
   public createCandidature!: HasManyCreateAssociationMixin<Candidature>;
   public getCandidatures!: HasManyGetAssociationsMixin<Candidature>;
+
 }
 
 User.init({
