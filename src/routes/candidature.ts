@@ -63,6 +63,7 @@ candidatureRouter.post('/', [checkJwt], async (req: Request, res: Response) => {
     //role guard
     if (user!.role !== 'eleve') return res.status(403).send('Vous ne pouvez pas créer une candidature sans être élève');
     delete params.status; //student can see status but cannot update it
+    delete params.public_admin_comment;
     params.status = <boolean>params.draft ? 1 : 2;
   }
 
@@ -99,6 +100,7 @@ candidatureRouter.put('/:id', [checkJwt], async (req: Request, res: Response) =>
       if (cand.UserId !== userId) return res.status(403).json('Les élèves ne peuvent accéder qu\'à leurs propres candidatures');
       if (![1, 3].includes(cand.status)) return res.status(403).json('Vous ne pouvez pas mettre à jour votre candidature si celle si est déjà transmise');
       delete params.status; //student can see status but cannot update it
+      delete params.public_admin_comment;
     }
     if (cand.status === 1 && !(<boolean>params.draft)) params.status = 2;
     //end of guards

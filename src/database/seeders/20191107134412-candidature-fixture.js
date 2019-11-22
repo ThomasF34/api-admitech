@@ -79,6 +79,7 @@ module.exports = {
       other_apply_apprentise: null,
       candidate_comment: 'je suis content ',
       admin_comment: 'eleve a rejeter',
+      public_admin_comment: null,
       status: 2,
       branch: 'do',
       certified: true,
@@ -126,6 +127,7 @@ module.exports = {
       other_apply_apprentise: null,
       candidate_comment: 'je suis content ',
       admin_comment: 'eleve a rejeter',
+      public_admin_comment: null,
       status: 7,
       branch: 'do',
       certified: true,
@@ -167,7 +169,7 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    Promise.all([
+    return Promise.all([
       queryInterface.bulkDelete('candidatures', [{
         first_name: 'Alice',
       }, {
