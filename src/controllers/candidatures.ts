@@ -116,7 +116,7 @@ interface checkError {
 }
 
 function isValid(reqBody: any): [boolean, checkError[]] {
-  if (reqBody.status === 1) {
+  if (reqBody.status === 1 || <boolean>reqBody.draft) {
     return [true, []];
   } else {
     let errs: checkError[] = [];
