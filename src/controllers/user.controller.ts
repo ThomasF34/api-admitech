@@ -33,7 +33,7 @@ function getUserByEmail(emailToCheck: string): Promise<User> {
 function getAllJuries(): Promise<User[]> {
   return User.findAll({
     where: {
-      role: "administration"
+      role: 'administration'
     }
   });
 }
