@@ -24,8 +24,7 @@ module.exports = {
       formation: 'do',
       created_at: new Date(),
       updated_at: new Date()
-    }
-      ,
+    },
     {
       begining_hour: new Date(),
       ending_hour: new Date(),
@@ -37,10 +36,12 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    Promise.all([
+    return Promise.all([
       queryInterface.bulkDelete('entretiens', [{
-        id: 1,
-        id: 2,
+        id: 1
+      }, {
+        id: 2
+      }, {
         id: 3
       }]),
     ]);
