@@ -26,7 +26,7 @@
     "@types/dotenv": "^8.2.0",
     "@types/helmet": "0.0.44",
     "@types/jsonwebtoken": "^8.3.5",
-    "aws-sdk": "^2.573.0",
+    "aws-sdk": "^2.814.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "connect-datadog": "0.0.9",
